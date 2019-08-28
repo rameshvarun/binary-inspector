@@ -1,0 +1,24 @@
+{
+  "name": "decode-city",
+  "version": "1.0.0",
+  "description": "",
+  "main": "opus.js",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "npm run typecheck && npm run check-format && npm run build",
+    "format": "prettier --write src/**/*.ts src/**/*.tsx",
+    "check-format": "prettier-check src/**/*.ts src/**/*.tsx"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3",
+    "@types/node": "^12.7.2",
+    "prettier": "^1.18.2",
+    "prettier-check": "^2.0.0",
+    "typescript": "^3.5.3"
+  }
+}
