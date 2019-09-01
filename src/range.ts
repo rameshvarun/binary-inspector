@@ -1,4 +1,4 @@
-import {assert} from 'chai';
+import { assert } from "chai";
 
 export class ByteRange {
   buffer: ArrayBuffer;
@@ -20,10 +20,20 @@ export class ByteRange {
   }
 
   toHex(): string {
-    return Array.from(this.toUint8Array()).map (b => b.toString (16).padStart (2, "0")).join("");
+    return Array.from(this.toUint8Array())
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
   }
 
-  bytes(byteStart: number, byteLength: number) {
+  bytes(byteStart: number, byteLength: number | null) {
+    if (byteStart < 0)
+      throw new Error(`byteStart is ${byteStart}, but should be non-negative.`);
+    if (byteStart + byteLength > this.byteLength)
+      throw new Error(`New subrange does not fit within current subrange.`);
+
+    if (byteLength == null) {
+      byteLength = this.byteLength - byteStart;
+    }
     return new ByteRange(this.buffer, this.byteStart + byteStart, byteLength);
   }
 
@@ -42,6 +52,16 @@ export class ByteRange {
     }
     return bits;
   }
+
+  chunks(size: number): Array<ByteRange> {
+    let chunks = [];
+    let cursor = 0;
+    while (cursor < this.byteLength) {
+      chunks.push(this.bytes(cursor, Math.min(size, this.byteLength - cursor)));
+      cursor += size;
+    }
+    return chunks;
+  }
 }
 
 export class BitRange {
@@ -56,7 +76,11 @@ export class BitRange {
   }
 
   enclosingByteRange(): ByteRange {
-    return new ByteRange(this.buffer, Math.floor(this.bitStart / 8), Math.floor((this.bitStart + this.bits - 1) / 8) + 1);
+    return new ByteRange(
+      this.buffer,
+      Math.floor(this.bitStart / 8),
+      Math.floor((this.bitStart + this.bits - 1) / 8) + 1
+    );
   }
 
   readBits(): Array<boolean> {
@@ -67,9 +91,8 @@ export class BitRange {
   readUIntBE(): number {
     let number = 0;
     let bits = this.readBits();
-    for(let i = 0; i < bits.length; ++i) {
-      if (bits[bits.length - 1 - i])
-        number += Math.pow(2, i)
+    for (let i = 0; i < bits.length; ++i) {
+      if (bits[bits.length - 1 - i]) number += Math.pow(2, i);
     }
     return number;
   }
