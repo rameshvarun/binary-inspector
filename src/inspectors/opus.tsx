@@ -1,6 +1,11 @@
-import { ByteRange, BitRange } from "./range";
-import { Tree } from "./tree";
+import { ByteRange, BitRange } from "../core/range";
+import { Tree } from "../core/tree";
 import { assert } from "chai";
+
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+
+import { SimpleInspector } from "../ui/simpleinspector";
 
 enum Mode {
   SILK_ONLY = "SILK-only",
@@ -50,7 +55,7 @@ const SILK_ONLY_FRAME_SIZES = [10, 20, 40, 60];
 const HYBRID_FRAME_SIZES = [10, 20];
 const CELT_ONLY_FRAME_SIZES = [2.5, 5, 10, 20];
 
-function parseConfig(config) {
+function parseConfig(config): [Mode, Bandwidth, number] {
   if (config <= 3) {
     return [Mode.SILK_ONLY, Bandwidth.NB, SILK_ONLY_FRAME_SIZES[config]];
   } else if (config <= 7) {
@@ -97,21 +102,21 @@ function inspectFrame(range: ByteRange): Tree {
 }
 
 function inspectFrames(c: number, range: ByteRange): Tree {
-  let frames = [];
+  let frames: Array<Tree> = [];
   if (c == 0) {
     frames = [inspectFrame(range)];
   } else if (c == 1) {
     assert(range.byteLength % 2 == 0);
     frames = [
-      inspectFrame(range.bytes(0, byteLength / 2)),
-      inspectFrame(range.bytes(byteLength / 2))
+      inspectFrame(range.bytes(0, range.byteLength / 2)),
+      inspectFrame(range.bytes(range.byteLength / 2))
     ];
   }
 
   return new Tree(`Compressed Frames`, range, frames);
 }
 
-function inspect(range: ByteRange): Tree {
+export function inspect(range: ByteRange): Tree {
   let toc = range.bytes(0, 1);
   let config = toc.bits(0, 5);
   let s = toc.bits(5, 1);
@@ -134,13 +139,9 @@ function inspect(range: ByteRange): Tree {
     inspectFrames(c.readUIntBE(), range.bytes(1))
   ]);
 }
-
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-
-import { Inspector } from "./inspector";
-
-ReactDOM.render(
-  <Inspector inspect={inspect} />,
-  document.getElementById("root")
-);
+export function entry() {
+  ReactDOM.render(
+    <SimpleInspector inspect={inspect} />,
+    document.getElementById("root")
+  );
+}

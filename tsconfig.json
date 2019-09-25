@@ -2,7 +2,7 @@
     "compilerOptions": {
         "strictNullChecks": true,
         "module": "es6",
-        "target": "es5",
+        "target": "ES2017",
         "jsx": "react",
         "sourceMap": true,
         "allowJs": true,

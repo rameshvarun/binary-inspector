@@ -1,5 +1,9 @@
 import { assert } from "chai";
 
+/**
+ * This represents a byte range in an ArrayBuffer. This can be used to read out
+ * data as well as for highlighting regions in the BinaryView.
+ */
 export class ByteRange {
   buffer: ArrayBuffer;
   byteStart: number;
@@ -25,15 +29,16 @@ export class ByteRange {
       .join("");
   }
 
-  bytes(byteStart: number, byteLength: number | null) {
+  bytes(byteStart: number, byteLength?: number) {
+    if (byteLength == null) {
+      byteLength = this.byteLength - byteStart;
+    }
+
     if (byteStart < 0)
       throw new Error(`byteStart is ${byteStart}, but should be non-negative.`);
     if (byteStart + byteLength > this.byteLength)
       throw new Error(`New subrange does not fit within current subrange.`);
 
-    if (byteLength == null) {
-      byteLength = this.byteLength - byteStart;
-    }
     return new ByteRange(this.buffer, this.byteStart + byteStart, byteLength);
   }
 
@@ -42,7 +47,7 @@ export class ByteRange {
   }
 
   readBits(): Array<boolean> {
-    let bits = [];
+    let bits: Array<boolean> = [];
     let bytes = this.toUint8Array();
     while (bits.length < this.byteLength * 8) {
       let byte = bytes[Math.floor(bits.length / 8)];
@@ -54,7 +59,7 @@ export class ByteRange {
   }
 
   chunks(size: number): Array<ByteRange> {
-    let chunks = [];
+    let chunks: Array<ByteRange> = [];
     let cursor = 0;
     while (cursor < this.byteLength) {
       chunks.push(this.bytes(cursor, Math.min(size, this.byteLength - cursor)));
@@ -64,6 +69,9 @@ export class ByteRange {
   }
 }
 
+/**
+ * This represents a range of bits in an ArrayBuffer. Use for reading bitfields.
+ */
 export class BitRange {
   buffer: ArrayBuffer;
   bitStart: number;

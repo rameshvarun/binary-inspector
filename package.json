@@ -5,9 +5,12 @@
   "main": "opus.js",
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
     "test": "npm run typecheck && npm run check-format && npm run build",
     "format": "prettier --write src/**/*.ts src/**/*.tsx",
-    "check-format": "prettier-check src/**/*.ts src/**/*.tsx"
+    "check-format": "prettier-check src/**/*.ts src/**/*.tsx",
+    "build": "rm -rf dist && npx parcel build  --global main --no-source-maps --no-content-hash --public-url https://rameshvarun.github.io/binary-inspector/ src/*.html",
+    "start": "parcel --global main src/*.html"
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +23,7 @@
     "utils": "^0.3.1"
   },
   "devDependencies": {
-    "@types/node": "^12.7.2",
+    "@types/chai": "^4.2.3",
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.9.0",
     "parcel-bundler": "^1.12.3",
