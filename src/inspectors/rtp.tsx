@@ -10,7 +10,11 @@ import { SimpleInspector } from "../ui/simpleinspector";
 const HEADER_EXTENSION_PARSERS = new Map();
 const PAYLOAD_PARSERS = new Map();
 
-function inspect(range: ByteRange, payloadTypes: Map<number, string>, headerExtensions: Map<number, string>): Tree {
+function inspect(
+  range: ByteRange,
+  payloadTypes: Map<number, string>,
+  headerExtensions: Map<number, string>
+): Tree {
   let v = range.bits(0, 2);
   let p = range.bits(2, 1);
   let x = range.bits(3, 1);
@@ -24,8 +28,4 @@ function inspect(range: ByteRange, payloadTypes: Map<number, string>, headerExte
   let ssrc = range.bytes(4, 4);
 
   return new Tree(`RTP Packet`, range);
-}
-
-export function entry() {
-  ReactDOM.render(<SimpleInspector inspect={inspect} />, document.getElementById("root"));
 }

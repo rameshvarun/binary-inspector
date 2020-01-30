@@ -10,6 +10,10 @@ import { BinaryInput } from "./binaryinput";
 import { BinaryView } from "./binaryview";
 import { TreeView } from "./treeview";
 
+type SimpleInspectorState =
+  | { kind: "noData" }
+  | { kind: "hasData"; data: ByteRange; tree: Tree };
+
 /**
  * This widget constructs a basic inspector with a BinaryInput, a TreeView,
  * and a BinaryView, similar to what you would see in Wireshark. Other inspectors
@@ -17,11 +21,11 @@ import { TreeView } from "./treeview";
  */
 export class SimpleInspector extends React.Component<
   { inspect: (range: ByteRange) => Tree },
-  null | { data: ByteRange; tree: Tree }
+  SimpleInspectorState
 > {
   constructor(props) {
     super(props);
-    this.state = null;
+    this.state = { kind: "noData" };
   }
 
   componentDidMount() {
@@ -38,7 +42,7 @@ export class SimpleInspector extends React.Component<
     let data = new ByteRange(buffer, 0, buffer.byteLength);
     let tree = this.props.inspect(data);
 
-    this.setState({ data: data, tree: tree });
+    this.setState({ kind: "hasData", data: data, tree: tree });
   }
 
   render() {
@@ -48,7 +52,7 @@ export class SimpleInspector extends React.Component<
           inputName="input"
           onBuffer={buffer => this.loadBuffer(buffer)}
         />
-        {this.state ? (
+        {this.state.kind == "hasData" ? (
           <>
             <Row>
               <Col>

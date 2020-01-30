@@ -13,7 +13,10 @@ export class BinaryInput extends React.Component<{
 
   render() {
     return (
-      <Tabs defaultActiveKey={window.location.hash ? "base64" : "hex"}>
+      <Tabs
+        defaultActiveKey={window.location.hash ? "base64" : "hex"}
+        id="binary-input-tabs"
+      >
         <Tab eventKey="hex" title="Hex">
           <Form>
             <Form.Group controlId="exampleForm.ControlTextarea1">
@@ -21,6 +24,7 @@ export class BinaryInput extends React.Component<{
                 as="textarea"
                 rows="3"
                 onChange={event => {
+                  // @ts-ignore
                   let hex = event.target.value.trim();
                   let buffer = utils.hexToArrayBuffer(hex);
                   this.props.onBuffer(buffer);
@@ -36,6 +40,7 @@ export class BinaryInput extends React.Component<{
                 as="textarea"
                 rows="3"
                 onChange={event => {
+                  // @ts-ignore
                   let base64 = event.target.value.trim();
                   let buffer = utils.base64ToArrayBuffer(base64);
                   this.props.onBuffer(buffer);

@@ -3,20 +3,10 @@
 <head>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 
 <body>
-
-  <div class="container">
-    <div class="page-header">
-      <h1>RTP Packet Inspector</h1>
-      <hr>
-    </div>
-
     <div id="root"></div>
-  </div>
-
-  <script src="./inspectors/rtp.tsx"></script>
-  <script>main.entry();</script>
 </body>
 </html>

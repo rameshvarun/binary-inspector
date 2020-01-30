@@ -1,6 +1,6 @@
 export function hexToArrayBuffer(hex: string) {
   return new Uint8Array(
-    hex.match(/[\da-f]{2}/gi).map(function(h) {
+    hex.match(/[\da-f]{2}/gi)!.map(function(h) {
       return parseInt(h, 16);
     })
   ).buffer;
