@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Tabs, Tab, Form } from "react-bootstrap";
+import { Tabs, Tab, Form, Card } from "react-bootstrap";
 
 import * as utils from "../core/utils";
+import Dropzone from "react-dropzone";
 
 export class BinaryInput extends React.Component<{
   inputName: string;
@@ -48,6 +49,31 @@ export class BinaryInput extends React.Component<{
                 defaultValue={window.location.hash.substring(1)}
               />
             </Form.Group>
+          </Form>
+        </Tab>
+        <Tab eventKey="file" title="File">
+          <Form>
+            <Dropzone
+              onDrop={async files => {
+                let file: File = files[0];
+                // @ts-ignore
+                let buffer = await file.arrayBuffer();
+                this.props.onBuffer(buffer);
+              }}
+            >
+              {({ getRootProps, getInputProps }) => (
+                <div {...getRootProps()}>
+                  <Card className="text-center">
+                    <Card.Body>
+                      <Card.Text>
+                        Drag and drop file here, or click to browse.
+                      </Card.Text>
+                      <input {...getInputProps()} />
+                    </Card.Body>
+                  </Card>
+                </div>
+              )}
+            </Dropzone>
           </Form>
         </Tab>
       </Tabs>
