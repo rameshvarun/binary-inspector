@@ -7,12 +7,11 @@ import { Row, Col } from "react-bootstrap";
 import * as utils from "../core/utils";
 
 import { BinaryInput } from "./binaryinput";
-import { BinaryView } from "./binaryview";
-import { TreeView } from "./treeview";
+import { TreeBinaryView } from "./treebinaryview";
 
 type SimpleInspectorState =
   | { kind: "noData" }
-  | { kind: "hasData"; data: ByteRange; tree: Tree; selected: null | Tree };
+  | { kind: "hasData"; data: ByteRange; tree: Tree };
 
 /**
  * This widget constructs a basic inspector with a BinaryInput, a TreeView,
@@ -53,28 +52,7 @@ export class SimpleInspector extends React.Component<
           onBuffer={buffer => this.loadBuffer(buffer)}
         />
         {this.state.kind == "hasData" ? (
-          <>
-            <Row>
-              <Col>
-                <TreeView
-                  tree={this.state.tree}
-                  onSelect={selected => {
-                    if (this.state.kind == "hasData") {
-                      this.setState({ kind: "hasData", selected: selected });
-                    }
-                  }}
-                />
-              </Col>
-              <Col>
-                <BinaryView
-                  data={this.state.data}
-                  selected={
-                    this.state.selected ? this.state.selected.range : undefined
-                  }
-                />
-              </Col>
-            </Row>
-          </>
+          <TreeBinaryView tree={this.state.tree} data={this.state.data} />
         ) : (
           <div>No data provided yet.</div>
         )}

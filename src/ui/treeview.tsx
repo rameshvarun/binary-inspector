@@ -4,7 +4,7 @@ import { ByteRange, BitRange } from "../core/range";
 import { Tree } from "../core/tree";
 
 export class TreeView extends React.Component<
-  { tree: Tree; onSelect?: (item: Tree) => void },
+  { tree: Tree; selected?: Tree; onSelect?: (item: Tree) => void },
   {}
 > {
   constructor(props) {

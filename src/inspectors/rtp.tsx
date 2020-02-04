@@ -9,6 +9,7 @@ import { SimpleInspector } from "../ui/simpleinspector";
 import { BinaryInput } from "../ui/binaryinput";
 import { BinaryView } from "../ui/binaryview";
 import { TreeView } from "../ui/treeview";
+import { TreeBinaryView } from "../ui/treebinaryview";
 
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 
@@ -37,6 +38,8 @@ function inspect(
   range: ByteRange,
   payloadTypes: Map<number, PayloadParser>
 ): Tree {
+  let packetRange = range;
+
   let v = range.bits(0, 2);
   let p = range.bits(2, 1);
   let x = range.bits(3, 1);
@@ -99,7 +102,7 @@ function inspect(
     elements.push(new Tree(`Payload: ${payload.toHex()}`, payload));
   }
 
-  return new Tree(`RTP Packet`, range, elements);
+  return new Tree(`RTP Packet`, packetRange, elements);
 }
 
 type RTPInspectorState =
@@ -163,16 +166,7 @@ class RTPInspector extends React.Component<{}, RTPInspectorState> {
         </Form>
 
         {this.state.kind == "hasData" ? (
-          <>
-            <Row>
-              <Col>
-                <TreeView tree={this.state.tree} />
-              </Col>
-              <Col>
-                <BinaryView data={this.state.data} />
-              </Col>
-            </Row>
-          </>
+          <TreeBinaryView tree={this.state.tree} data={this.state.data} />
         ) : (
           <div>No data provided yet.</div>
         )}
