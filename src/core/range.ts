@@ -29,6 +29,13 @@ export class ByteRange {
       .join("");
   }
 
+  contains(other: ByteRange) {
+    return (
+      other.byteStart >= this.byteStart &&
+      other.byteStart + other.byteLength <= this.byteStart + this.byteLength
+    );
+  }
+
   bytes(byteStart: number, byteLength?: number) {
     if (byteLength == null) {
       byteLength = this.byteLength - byteStart;
@@ -58,6 +65,10 @@ export class ByteRange {
     return bits;
   }
 
+  readUIntBE(): number {
+    return this.bits(0, this.byteLength * 8).readUIntBE();
+  }
+
   chunks(size: number): Array<ByteRange> {
     let chunks: Array<ByteRange> = [];
     let cursor = 0;
@@ -84,16 +95,17 @@ export class BitRange {
   }
 
   enclosingByteRange(): ByteRange {
-    return new ByteRange(
-      this.buffer,
-      Math.floor(this.bitStart / 8),
-      Math.floor((this.bitStart + this.bits - 1) / 8) + 1
-    );
+    let byteStart = Math.floor(this.bitStart / 8);
+    let byteEnd = Math.floor((this.bitStart + this.bits - 1) / 8) + 1;
+    return new ByteRange(this.buffer, byteStart, byteEnd - byteStart);
   }
 
   readBits(): Array<boolean> {
-    let bits = this.enclosingByteRange().readBits();
-    return bits.slice(this.bitStart, this.bitStart + this.bits);
+    let enclosingByteRange = this.enclosingByteRange();
+    let bits = enclosingByteRange.readBits();
+
+    let start = this.bitStart - enclosingByteRange.byteStart * 8;
+    return bits.slice(start, start + this.bits);
   }
 
   readUIntBE(): number {

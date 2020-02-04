@@ -12,7 +12,7 @@ import { TreeView } from "./treeview";
 
 type SimpleInspectorState =
   | { kind: "noData" }
-  | { kind: "hasData"; data: ByteRange; tree: Tree };
+  | { kind: "hasData"; data: ByteRange; tree: Tree; selected: null | Tree };
 
 /**
  * This widget constructs a basic inspector with a BinaryInput, a TreeView,
@@ -56,10 +56,22 @@ export class SimpleInspector extends React.Component<
           <>
             <Row>
               <Col>
-                <TreeView tree={this.state.tree} />
+                <TreeView
+                  tree={this.state.tree}
+                  onSelect={selected => {
+                    if (this.state.kind == "hasData") {
+                      this.setState({ kind: "hasData", selected: selected });
+                    }
+                  }}
+                />
               </Col>
               <Col>
-                <BinaryView data={this.state.data} />
+                <BinaryView
+                  data={this.state.data}
+                  selected={
+                    this.state.selected ? this.state.selected.range : undefined
+                  }
+                />
               </Col>
             </Row>
           </>

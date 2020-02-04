@@ -5,28 +5,32 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "tsc --noEmit --watch",
-    "test": "npm run typecheck && npm run check-format && npm run build",
-    "format": "prettier --write src/**/*.ts src/**/*.tsx",
+    "test": "jest",
+    "test:watch": "jest --watch --no-watchman",
+    "format": "prettier --write src/**/*.ts src/**/*.tsx *.js",
     "check-format": "prettier-check src/**/*.ts src/**/*.tsx",
     "build": "rm -rf dist/ && webpack --env production",
     "start": "webpack-dev-server --open --env development"
   },
-  "author": "",
+  "author": "Varun Ramesh",
   "license": "ISC",
   "dependencies": {
+    "@types/jest": "^25.1.1",
     "chai": "^4.2.0",
     "react": "^16.9.0",
     "react-bootstrap": "^1.0.0-beta.12",
-    "react-dom": "^16.9.0",
-    "utils": "^0.3.1"
+    "react-dom": "^16.9.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.3",
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.9.0",
+    "copy-webpack-plugin": "^5.1.1",
     "html-webpack-plugin": "^4.0.0-beta.11",
+    "jest": "^25.1.0",
     "prettier": "^1.18.2",
     "prettier-check": "^2.0.0",
+    "ts-jest": "^25.1.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.5.3",
     "webpack": "^4.41.5",

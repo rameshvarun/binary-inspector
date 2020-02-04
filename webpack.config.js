@@ -1,26 +1,43 @@
-const webpack = require('webpack');
+const webpack = require("webpack");
 const path = require("path");
-const merge = require('webpack-merge');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const merge = require("webpack-merge");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
-const INSPECTORS = [{
-    chunkName: 'opus',
-    entry: './src/inspectors/opus.tsx',
-    title: 'Opus Packet Inspector'
-}];
+const INSPECTORS = [
+  {
+    chunkName: "opus",
+    entry: "./src/inspectors/opus.tsx",
+    title: "Opus Packet Inspector"
+  },
+  {
+    chunkName: "stun",
+    entry: "./src/inspectors/stun.tsx",
+    title: "STUN Packet Inspector"
+  },
+  {
+    chunkName: "rtp",
+    entry: "./src/inspectors/rtp.tsx",
+    title: "RTP Packet Inspector"
+  }
+];
 
 const ENTRIES = {};
-const PLUGINS = []
+const PLUGINS = [];
 
 for (let inspector of INSPECTORS) {
-    ENTRIES[inspector.chunkName] = inspector.entry;
-    PLUGINS.push(new HtmlWebpackPlugin({
-      template: './src/inspector.html',
+  ENTRIES[inspector.chunkName] = inspector.entry;
+  PLUGINS.push(
+    new HtmlWebpackPlugin({
+      template: "./src/inspector.html",
       title: inspector.title,
-      filename: inspector.chunkName + '.html',
+      filename: inspector.chunkName + "/index.html",
       chunks: [inspector.chunkName]
-    }));
+    })
+  );
 }
+
+PLUGINS.push(new CopyPlugin([{ from: "src/index.html", to: "index.html" }]));
 
 const common = {
   entry: ENTRIES,
@@ -37,8 +54,8 @@ const common = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
+        use: ["style-loader", "css-loader"]
+      }
     ]
   },
   resolve: {
@@ -46,33 +63,33 @@ const common = {
   },
   output: {
     filename: "[name].js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "dist")
   },
   plugins: PLUGINS,
   optimization: {
     splitChunks: {
-       chunks: 'all',
-     },
-   },
+      chunks: "all"
+    }
+  }
 };
 
 const development = {
-  mode: 'development',
+  mode: "development",
   devtool: "inline-source-map",
   devServer: {
     contentBase: "./dist",
     https: true
-  },
-}
+  }
+};
 
 const production = {
-  mode: 'production',
-}
+  mode: "production"
+};
 
-module.exports = (env) => {
-  if (env === 'development') return merge(common, development);
-  else if (env === 'production') return merge(common, production);
+module.exports = env => {
+  if (env === "development") return merge(common, development);
+  else if (env === "production") return merge(common, production);
   else {
     throw new Error(`Unknown environment ${env}.`);
   }
-}
+};
