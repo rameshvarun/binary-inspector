@@ -16,21 +16,27 @@ import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import * as opus from "../decoders/opus";
 import * as red from "../decoders/red";
 
+import * as persist from "../core/persist";
+import * as utils from "../core/utils";
+
 const HEADER_EXTENSION_PARSERS = new Map();
 
 type PayloadParser = {
   name: string;
   inspect: (range: ByteRange, payloadTypes: Map<number, PayloadParser>) => Tree;
+  defaultPT: number;
 };
 
 const PAYLOAD_PARSERS: Array<PayloadParser> = [
   {
     name: "Opus (RFC 7587)",
-    inspect: opus.inspect
+    inspect: opus.inspect,
+    defaultPT: 111
   },
   {
     name: "RED (RFC 2198)",
-    inspect: red.inspect
+    inspect: red.inspect,
+    defaultPT: 108
   }
 ];
 
@@ -119,14 +125,21 @@ class RTPInspector extends React.Component<{}, RTPInspectorState> {
     super(props);
     this.state = {
       kind: "noData",
-      payloadParsers: new Map([
-        [111, PAYLOAD_PARSERS[0]],
-        [108, PAYLOAD_PARSERS[1]]
-      ])
+      payloadParsers: new Map()
     };
   }
 
+  componentDidMount() {
+    if (persist.has("data")) {
+      let base64 = persist.get("data")!;
+      let buffer = utils.base64ToArrayBuffer(base64);
+      this.loadBuffer(buffer);
+    }
+  }
+
   loadBuffer(buffer) {
+    persist.set("data", utils.arrayBufferToBase64(buffer));
+
     let data = new ByteRange(buffer, 0, buffer.byteLength);
     let tree = inspect(data, this.state.payloadParsers);
 
@@ -144,6 +157,7 @@ class RTPInspector extends React.Component<{}, RTPInspectorState> {
         <h2>RTP Packet</h2>
         <BinaryInput
           inputName="input"
+          defaultBase64={persist.get("data")}
           onBuffer={buffer => this.loadBuffer(buffer)}
         />
         <h2>Payload Type Mappings</h2>

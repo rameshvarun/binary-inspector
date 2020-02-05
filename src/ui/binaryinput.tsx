@@ -4,8 +4,11 @@ import { Tabs, Tab, Form, Card } from "react-bootstrap";
 import * as utils from "../core/utils";
 import Dropzone from "react-dropzone";
 
+import * as persist from "../core/persist";
+
 export class BinaryInput extends React.Component<{
   inputName: string;
+  defaultBase64?: string;
   onBuffer: (buffer: ArrayBuffer) => void;
 }> {
   constructor(props) {
@@ -15,7 +18,7 @@ export class BinaryInput extends React.Component<{
   render() {
     return (
       <Tabs
-        defaultActiveKey={window.location.hash ? "base64" : "hex"}
+        defaultActiveKey={this.props.defaultBase64 ? "base64" : "hex"}
         id="binary-input-tabs"
       >
         <Tab eventKey="hex" title="Hex">
@@ -46,7 +49,7 @@ export class BinaryInput extends React.Component<{
                   let buffer = utils.base64ToArrayBuffer(base64);
                   this.props.onBuffer(buffer);
                 }}
-                defaultValue={window.location.hash.substring(1)}
+                defaultValue={this.props.defaultBase64}
               />
             </Form.Group>
           </Form>

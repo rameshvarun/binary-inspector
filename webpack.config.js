@@ -9,16 +9,6 @@ const INSPECTORS = [
     chunkName: "opus",
     entry: "./src/inspectors/opus.tsx",
     title: "Opus Packet Inspector"
-  },
-  {
-    chunkName: "stun",
-    entry: "./src/inspectors/stun.tsx",
-    title: "STUN Packet Inspector"
-  },
-  {
-    chunkName: "rtp",
-    entry: "./src/inspectors/rtp.tsx",
-    title: "RTP Packet Inspector"
   }
 ];
 

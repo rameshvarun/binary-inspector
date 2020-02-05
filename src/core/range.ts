@@ -15,6 +15,10 @@ export class ByteRange {
     this.byteLength = byteLength;
   }
 
+  size(): number {
+    return this.byteLength;
+  }
+
   toDataView() {
     return new DataView(this.buffer, this.byteStart, this.byteLength);
   }

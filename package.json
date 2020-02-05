@@ -17,13 +17,14 @@
   "dependencies": {
     "@types/jest": "^25.1.1",
     "chai": "^4.2.0",
+    "query-string": "^6.10.1",
     "react": "^16.9.0",
     "react-bootstrap": "^1.0.0-beta.12",
     "react-dom": "^16.9.0",
     "react-dropzone": "^10.2.1"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.3",
+    "@types/chai": "^4.2.8",
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.9.0",
     "copy-webpack-plugin": "^5.1.1",
