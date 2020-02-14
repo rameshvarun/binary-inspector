@@ -3,26 +3,38 @@ const path = require("path");
 const merge = require("webpack-merge");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const url = require("url");
 
 const INSPECTORS = [
   {
     chunkName: "opus",
     entry: "./src/inspectors/opus.tsx",
     title: "Opus Packet Inspector"
+  },
+  {
+    chunkName: "stun",
+    entry: "./src/inspectors/stun.tsx",
+    title: "STUN Packet Inspector"
   }
 ];
 
 const ENTRIES = {};
 const PLUGINS = [];
 
+const GITHUB_ROOT =
+  "https://github.com/rameshvarun/binary-inspector/blob/master/";
+
 for (let inspector of INSPECTORS) {
   ENTRIES[inspector.chunkName] = inspector.entry;
   PLUGINS.push(
     new HtmlWebpackPlugin({
       template: "./src/inspector.html",
-      title: inspector.title,
       filename: inspector.chunkName + "/index.html",
-      chunks: [inspector.chunkName]
+      chunks: [inspector.chunkName],
+      templateParameters: {
+        title: inspector.title,
+        githubURL: url.resolve(GITHUB_ROOT, inspector.entry)
+      }
     })
   );
 }
