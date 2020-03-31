@@ -21,14 +21,14 @@ export class TreeBinaryView extends React.Component<
     return (
       <>
         <Row>
-          <Col>
+          <Col md={6}>
             <TreeView
               tree={this.props.tree}
               selected={this.state.selected}
               onSelect={selected => this.setState({ selected: selected })}
             />
           </Col>
-          <Col>
+          <Col md={6}>
             <BinaryView
               data={this.props.data}
               selected={

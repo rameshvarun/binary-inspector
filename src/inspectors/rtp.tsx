@@ -11,7 +11,7 @@ import { BinaryView } from "../ui/binaryview";
 import { TreeView } from "../ui/treeview";
 import { TreeBinaryView } from "../ui/treebinaryview";
 
-import { Container, Form, Button, Row, Col } from "react-bootstrap";
+import { Container, Form, Button, Row, Col, Alert } from "react-bootstrap";
 
 import * as opus from "../decoders/opus";
 import * as red from "../decoders/red";
@@ -39,6 +39,39 @@ const PAYLOAD_PARSERS: Array<PayloadParser> = [
     defaultPT: 108
   }
 ];
+
+function inspectOneByteHeaderExtensions(range: ByteRange) {
+  let headers: Array<Tree> = [];
+
+  let ptr = range;
+  while (ptr.size() > 0) {
+    let header = ptr.bytes(0, 1);
+    if (header.readUIntBE() == 0) {
+      ptr = ptr.bytes(1);
+      continue;
+    }
+
+    let id = header.bits(0, 4);
+    let len = header.bits(4, 4);
+
+    console.log(id.readUIntBE());
+    console.log(len.readUIntBE());
+
+    let dataLength = len.readUIntBE() + 1;
+    let data = ptr.bytes(1, dataLength);
+    headers.push(
+      new Tree(`Header`, ptr.bytes(0, 1 + dataLength), [
+        new Tree(`ID: ${id.readUIntBE()}`, id),
+        new Tree(`Length: ${len.readUIntBE()} (${dataLength} bytes)`, len),
+        new Tree(`Data: ${data.toHex()}`, data)
+      ])
+    );
+
+    ptr = ptr.bytes(1 + dataLength);
+  }
+
+  return new Tree(`Headers`, range, headers);
+}
 
 function inspect(
   range: ByteRange,
@@ -92,7 +125,12 @@ function inspect(
         length
       )
     );
-    elements.push(new Tree(`Header Data: ${headerData.toHex()}`, headerData));
+
+    if (profile.readUIntBE() == 48862) {
+      elements.push(inspectOneByteHeaderExtensions(headerData));
+    } else {
+      elements.push(new Tree(`Header Data: ${headerData.toHex()}`, headerData));
+    }
 
     range = range.bytes(4 + lengthBytes);
   }
@@ -114,10 +152,16 @@ function inspect(
 type RTPInspectorState =
   | { kind: "noData"; payloadParsers: Map<number, PayloadParser> }
   | {
-      kind: "hasData";
+      kind: "decodeSuccess";
       payloadParsers: Map<number, PayloadParser>;
       data: ByteRange;
       tree: Tree;
+    }
+  | {
+      kind: "decodeFailure";
+      payloadParsers: Map<number, PayloadParser>;
+      data: ByteRange;
+      error: Error;
     };
 
 class RTPInspector extends React.Component<{}, RTPInspectorState> {
@@ -141,14 +185,22 @@ class RTPInspector extends React.Component<{}, RTPInspectorState> {
     persist.set("data", utils.arrayBufferToBase64(buffer));
 
     let data = new ByteRange(buffer, 0, buffer.byteLength);
-    let tree = inspect(data, this.state.payloadParsers);
-
-    this.setState({
-      kind: "hasData",
-      data: data,
-      tree: tree,
-      payloadParsers: this.state.payloadParsers
-    });
+    try {
+      let tree = inspect(data, this.state.payloadParsers);
+      this.setState({
+        kind: "decodeSuccess",
+        data: data,
+        tree: tree,
+        payloadParsers: this.state.payloadParsers
+      });
+    } catch (e) {
+      this.setState({
+        kind: "decodeFailure",
+        data: data,
+        error: e,
+        payloadParsers: this.state.payloadParsers
+      });
+    }
   }
 
   render() {
@@ -179,11 +231,25 @@ class RTPInspector extends React.Component<{}, RTPInspectorState> {
           </Form.Group>
         </Form>
 
-        {this.state.kind == "hasData" ? (
+        {this.state.kind == "decodeSuccess" && (
           <TreeBinaryView tree={this.state.tree} data={this.state.data} />
-        ) : (
-          <div>No data provided yet.</div>
         )}
+        {this.state.kind == "decodeFailure" && (
+          <Row>
+            <Col md={6}>
+              <Alert variant="danger">
+                <Alert.Heading>{this.state.error.toString()}</Alert.Heading>
+                <code>
+                  <pre>{this.state.error.stack}</pre>
+                </code>
+              </Alert>
+            </Col>
+            <Col md={6}>
+              <BinaryView data={this.state.data} />
+            </Col>
+          </Row>
+        )}
+        {this.state.kind == "noData" && <div>No data provided yet.</div>}
       </>
     );
   }

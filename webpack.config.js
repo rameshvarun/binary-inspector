@@ -15,6 +15,11 @@ const INSPECTORS = [
     chunkName: "stun",
     entry: "./src/inspectors/stun.tsx",
     title: "STUN Packet Inspector"
+  },
+  {
+    chunkName: "rtp",
+    entry: "./src/inspectors/rtp.tsx",
+    title: "RTP Packet Inspector"
   }
 ];
 

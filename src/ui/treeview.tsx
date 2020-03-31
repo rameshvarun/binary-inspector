@@ -6,7 +6,12 @@ import { Tree } from "../core/tree";
 const ERROR_BACKGROUND_COLOR = "#ff6e6e";
 
 export class TreeView extends React.Component<
-  { tree: Tree; selected?: Tree; onSelect?: (item: Tree) => void },
+  {
+    depth?: number;
+    tree: Tree;
+    selected?: Tree;
+    onSelect?: (item: Tree) => void;
+  },
   {}
 > {
   constructor(props) {
@@ -16,6 +21,7 @@ export class TreeView extends React.Component<
 
   render() {
     let tree = this.props.tree;
+    let depth = this.props.depth || 0;
 
     let backgroundColor = "";
     if (tree.error) {
@@ -33,7 +39,7 @@ export class TreeView extends React.Component<
             backgroundColor: backgroundColor,
             paddingLeft: "5px"
           }}
-          open
+          open={depth <= 1}
         >
           <summary
             onClick={() => {
@@ -47,6 +53,7 @@ export class TreeView extends React.Component<
             <div key={i} style={{ paddingLeft: "15px" }}>
               <TreeView
                 tree={t}
+                depth={depth + 1}
                 onSelect={this.props.onSelect}
                 selected={this.props.selected}
               ></TreeView>
