@@ -255,14 +255,4 @@ class RTPInspector extends React.Component<{}, RTPInspectorState> {
   }
 }
 
-ReactDOM.render(
-  <Container>
-    <div className="page-header">
-      <h1>RTP Packet Inspector</h1>
-      Based off <a href="https://tools.ietf.org/html/rfc3550">RFC 3550</a>.
-      <hr />
-    </div>
-    <RTPInspector />
-  </Container>,
-  document.getElementById("root")
-);
+ReactDOM.render(<RTPInspector />, document.getElementById("root"));

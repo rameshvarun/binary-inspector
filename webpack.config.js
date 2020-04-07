@@ -9,17 +9,29 @@ const INSPECTORS = [
   {
     chunkName: "opus",
     entry: "./src/inspectors/opus.tsx",
-    title: "Opus Packet Inspector"
+    title: "Opus Packet Inspector",
+    subtitle: `Based off <a href='https://tools.ietf.org/html/rfc6716'>RFC 6716</a>`,
+    description: "A tool for dissecting Opus codec packets."
   },
   {
     chunkName: "stun",
     entry: "./src/inspectors/stun.tsx",
-    title: "STUN Packet Inspector"
+    title: "STUN Packet Inspector",
+    subtitle: `Based off <a href="https://tools.ietf.org/html/rfc5389">RFC 5389</a>`,
+    description: "A tool for dissecting STUN packets."
   },
   {
     chunkName: "rtp",
     entry: "./src/inspectors/rtp.tsx",
-    title: "RTP Packet Inspector"
+    title: "RTP Packet Inspector",
+    subtitle: `Based off <a href="https://tools.ietf.org/html/rfc3550">RFC 3550</a>.`,
+    description: "A tool for dissecting RTP packets."
+  },
+  {
+    chunkName: "rtcp",
+    entry: "./src/inspectors/rtcp.tsx",
+    title: "RTCP Packet Inspector",
+    subtitle: ""
   }
 ];
 
@@ -38,6 +50,8 @@ for (let inspector of INSPECTORS) {
       chunks: [inspector.chunkName],
       templateParameters: {
         title: inspector.title,
+        subtitle: inspector.subtitle,
+        description: inspector.description,
         githubURL: url.resolve(GITHUB_ROOT, inspector.entry)
       }
     })

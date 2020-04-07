@@ -158,13 +158,6 @@ function inspect(range: ByteRange): Tree {
 }
 
 ReactDOM.render(
-  <Container>
-    <div className="page-header">
-      <h1>STUN Packet Inspector</h1>
-      Based off <a href="https://tools.ietf.org/html/rfc5389">RFC 5389</a>.
-      <hr />
-    </div>
-    <SimpleInspector inspect={inspect} />
-  </Container>,
+  <SimpleInspector inspect={inspect} />,
   document.getElementById("root")
 );
