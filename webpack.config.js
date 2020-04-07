@@ -31,6 +31,14 @@ const INSPECTORS = [
     chunkName: "rtcp",
     entry: "./src/inspectors/rtcp.tsx",
     title: "RTCP Packet Inspector",
+    description: "A tool for dissecting RTCP compound packets."
+    subtitle: ""
+  },
+  {
+    chunkName: "png",
+    entry: "./src/inspectors/png.tsx",
+    title: "PNG Format Inspector",
+    description: "A tool for inspecting PNG chunks."
     subtitle: ""
   }
 ];
