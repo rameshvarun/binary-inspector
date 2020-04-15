@@ -40,6 +40,13 @@ const INSPECTORS = [
     title: "PNG Format Inspector",
     description: "A tool for inspecting PNG chunks.",
     subtitle: ""
+  },
+  {
+    chunkName: "ogg",
+    entry: "./src/inspectors/ogg.tsx",
+    title: "Ogg Format Inspector",
+    description: "A tool for inspecting Ogg pages.",
+    subtitle: `Based off <a href="https://tools.ietf.org/html/rfc3533">RFC 3533</a>`
   }
 ];
 

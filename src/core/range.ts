@@ -78,6 +78,15 @@ export class ByteRange {
     return this.bits(0, this.byteLength * 8).readUIntBE();
   }
 
+  readUIntLE(): number {
+    let number = 0;
+    let bytes = this.toUint8Array();
+    for (let i = 0; i < bytes.length; ++i) {
+      number += bytes[i] * Math.pow(2, i * 8);
+    }
+    return number;
+  }
+
   chunks(size: number): Array<ByteRange> {
     let chunks: Array<ByteRange> = [];
     let cursor = 0;
