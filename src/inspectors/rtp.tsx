@@ -11,7 +11,15 @@ import { BinaryView } from "../ui/binaryview";
 import { TreeView } from "../ui/treeview";
 import { TreeBinaryView } from "../ui/treebinaryview";
 
-import { Container, Form, Button, Row, Col, Alert } from "react-bootstrap";
+import {
+  Container,
+  Form,
+  Button,
+  Row,
+  Col,
+  Alert,
+  FormControl
+} from "react-bootstrap";
 
 import * as opus from "../decoders/opus";
 import * as red from "../decoders/red";
@@ -23,6 +31,7 @@ const HEADER_EXTENSION_PARSERS = new Map();
 
 type PayloadParser = {
   name: string;
+  id: string;
   inspect: (range: ByteRange, payloadTypes: Map<number, PayloadParser>) => Tree;
   defaultPT: number;
 };
@@ -30,11 +39,13 @@ type PayloadParser = {
 const PAYLOAD_PARSERS: Array<PayloadParser> = [
   {
     name: "Opus (RFC 7587)",
+    id: "opus",
     inspect: opus.inspect,
     defaultPT: 111
   },
   {
     name: "RED (RFC 2198)",
+    id: "red",
     inspect: red.inspect,
     defaultPT: 108
   }
@@ -167,9 +178,15 @@ type RTPInspectorState =
 class RTPInspector extends React.Component<{}, RTPInspectorState> {
   constructor(props) {
     super(props);
+
+    let payloadParsers = new Map();
+    for (let parser of PAYLOAD_PARSERS) {
+      payloadParsers.set(parser.defaultPT, parser);
+    }
+
     this.state = {
       kind: "noData",
-      payloadParsers: new Map()
+      payloadParsers: payloadParsers
     };
   }
 
@@ -203,6 +220,13 @@ class RTPInspector extends React.Component<{}, RTPInspectorState> {
     }
   }
 
+  payloadTypeRef: React.RefObject<
+    FormControl<"input"> & HTMLInputElement
+  > = React.createRef();
+  payloadParserRef: React.RefObject<
+    FormControl<"select"> & HTMLSelectElement
+  > = React.createRef();
+
   render() {
     return (
       <>
@@ -214,18 +238,40 @@ class RTPInspector extends React.Component<{}, RTPInspectorState> {
         />
         <h2>Payload Type Mappings</h2>
 
+        {Array.from(this.state.payloadParsers.entries()).map(([pt, parser]) => (
+          <div>
+            {pt} -> {parser.name}
+          </div>
+        ))}
+
         <Form>
           <Form.Group controlId="masterKey">
             <Form.Control
               type="number"
               placeholder="Enter the payload type number."
+              ref={this.payloadTypeRef}
             />
-            <Form.Control as="select">
-              {PAYLOAD_PARSERS.map(parser => (
-                <option>{parser.name}</option>
+            <Form.Control as="select" ref={this.payloadParserRef}>
+              {PAYLOAD_PARSERS.map((parser, i) => (
+                <option value={i}>{parser.name}</option>
               ))}
             </Form.Control>
-            <Button variant="primary" onClick={() => {}}>
+            <Button
+              variant="primary"
+              onClick={() => {
+                this.setState(state => {
+                  if (this.payloadTypeRef.current!.value) {
+                    let pt = parseInt(this.payloadTypeRef.current!.value, 10);
+                    let parser =
+                      PAYLOAD_PARSERS[
+                        parseInt(this.payloadParserRef.current!.value)
+                      ];
+                    state.payloadParsers.set(pt, parser);
+                  }
+                  return state;
+                });
+              }}
+            >
               Set Mapping
             </Button>
           </Form.Group>

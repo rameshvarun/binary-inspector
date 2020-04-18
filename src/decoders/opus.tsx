@@ -121,6 +121,8 @@ function inspectSILKFrame(
   let silkFramesCount = opusFrameSize / silkFrameSize;
   let channelCount = stereo ? 2 : 1;
 
+  let channelNames = stereo ? ["Mid", "Side"] : ["Mono"];
+
   let headerTree: Array<Tree> = [];
   let ptr = range.bits(0);
   for (let i = 0; i < channelCount; ++i) {
@@ -129,14 +131,24 @@ function inspectSILKFrame(
       let vadFlag = ptr.bits(0, 1);
       ptr = ptr.bits(1);
 
-      headerTree.push(new Tree(`VAD Flag: ${vadFlag.readBool()}`, vadFlag));
+      headerTree.push(
+        new Tree(
+          `${channelNames[i]}, Frame ${i + 1}, VAD Flag: ${vadFlag.readBool()}`,
+          vadFlag
+        )
+      );
     }
 
     // Read one bit.
     let lbrrFlag = ptr.bits(0, 1);
     ptr = ptr.bits(1);
 
-    headerTree.push(new Tree(`LBRR Flag: ${lbrrFlag.readBool()}`, lbrrFlag));
+    headerTree.push(
+      new Tree(
+        `${channelNames[i]}, LBRR Flag: ${lbrrFlag.readBool()}`,
+        lbrrFlag
+      )
+    );
   }
 
   return new Tree(
