@@ -50,7 +50,9 @@ const SILK_ONLY_FRAME_SIZES = [10, 20, 40, 60];
 const HYBRID_FRAME_SIZES = [10, 20];
 const CELT_ONLY_FRAME_SIZES = [2.5, 5, 10, 20];
 
-function parseConfig(config): [Mode, Bandwidth, number] {
+type Config = [Mode, Bandwidth, number];
+
+function parseConfig(config): Config {
   if (config <= 3) {
     return [Mode.SILK_ONLY, Bandwidth.NB, SILK_ONLY_FRAME_SIZES[config]];
   } else if (config <= 7) {
@@ -74,26 +76,87 @@ function parseConfig(config): [Mode, Bandwidth, number] {
   }
 }
 
-function inspectConfig(config: BitRange): Tree {
+function inspectConfig(config: BitRange): [Tree, Config] {
   let [mode, bw, fs] = parseConfig(config.readUIntBE());
+  return [
+    new Tree(
+      `Config: ${config.readUIntBE()} (${mode}, ${bw}, ${fs}ms)`,
+      config,
+      [
+        new Tree(`Mode: ${mode}`, config),
+        new Tree(
+          `Bandwidth: ${bw} (${getBandwidth(
+            bw
+          )}Hz), Sample Rate: ${getSampleRate(bw)}Hz`,
+          config
+        ),
+        new Tree(`Frame Size: ${fs}ms`, config)
+      ]
+    ),
+    [mode, bw, fs]
+  ];
+}
+
+function getSILKFrameSize(opusFrameSize: number): number {
+  switch (opusFrameSize) {
+    case 10:
+      return 10;
+    case 20:
+      return 20;
+    case 40:
+      return 20;
+    case 60:
+      return 20;
+    default:
+      throw new Error(`Unexpected Opus frame size ${opusFrameSize}.`);
+  }
+}
+
+function inspectSILKFrame(
+  range: ByteRange,
+  opusFrameSize: number,
+  stereo: boolean
+): Tree {
+  let silkFrameSize = getSILKFrameSize(opusFrameSize);
+  let silkFramesCount = opusFrameSize / silkFrameSize;
+  let channelCount = stereo ? 2 : 1;
+
+  let headerTree: Array<Tree> = [];
+  let ptr = range.bits(0);
+  for (let i = 0; i < channelCount; ++i) {
+    for (let j = 0; j < silkFramesCount; ++j) {
+      // Read one bit.
+      let vadFlag = ptr.bits(0, 1);
+      ptr = ptr.bits(1);
+
+      headerTree.push(new Tree(`VAD Flag: ${vadFlag.readBool()}`, vadFlag));
+    }
+
+    // Read one bit.
+    let lbrrFlag = ptr.bits(0, 1);
+    ptr = ptr.bits(1);
+
+    headerTree.push(new Tree(`LBRR Flag: ${lbrrFlag.readBool()}`, lbrrFlag));
+  }
+
   return new Tree(
-    `Config: ${config.readUIntBE()} (${mode}, ${bw}, ${fs}ms)`,
-    config,
-    [
-      new Tree(`Mode: ${mode}`, config),
-      new Tree(
-        `Bandwidth: ${bw} (${getBandwidth(bw)}Hz), Sample Rate: ${getSampleRate(
-          bw
-        )}Hz`,
-        config
-      ),
-      new Tree(`Frame Size: ${fs}ms`, config)
-    ]
+    `SILK Frame (${silkFramesCount} SILK Frames)`,
+    range,
+    headerTree
   );
 }
 
-function inspectFrame(range: ByteRange): Tree {
-  return new Tree(`Compressed Frame (${range.size()} bytes)`, range, []);
+function inspectFrame(
+  range: ByteRange,
+  mode: Mode,
+  frameSize: number,
+  stereo: boolean
+): Tree {
+  if (mode == Mode.SILK_ONLY) {
+    return inspectSILKFrame(range, frameSize, stereo);
+  } else {
+    return new Tree(`Compressed Frame (${range.size()} bytes)`, range, []);
+  }
 }
 
 function readFrameLength(range: ByteRange): [number, ByteRange] {
@@ -106,20 +169,31 @@ function readFrameLength(range: ByteRange): [number, ByteRange] {
   }
 }
 
-function inspectFrames(c: number, range: ByteRange): Tree {
+function inspectFrames(
+  c: number,
+  range: ByteRange,
+  mode: Mode,
+  frameSize: number,
+  stereo: boolean
+): Tree {
   let frames: Array<Tree> = [];
 
   try {
     if (c == 0) {
-      frames = [inspectFrame(range)];
+      frames = [inspectFrame(range, mode, frameSize, stereo)];
     } else if (c == 1) {
       assert(
         range.size() % 2 == 0,
         "In packing mode 2, the amount of bytes available for frames must be even."
       );
       frames = [
-        inspectFrame(range.bytes(0, range.byteLength / 2)),
-        inspectFrame(range.bytes(range.byteLength / 2))
+        inspectFrame(
+          range.bytes(0, range.byteLength / 2),
+          mode,
+          frameSize,
+          stereo
+        ),
+        inspectFrame(range.bytes(range.byteLength / 2), mode, frameSize, stereo)
       ];
     } else if (c == 2) {
       assert.fail("Packing mode 2 unimplemented.");
@@ -155,13 +229,13 @@ function inspectFrames(c: number, range: ByteRange): Tree {
 
         for (let [frameLength, _] of frameLengths) {
           let frameRange = pointer.bytes(0, frameLength);
-          frames.push(inspectFrame(frameRange));
+          frames.push(inspectFrame(frameRange, mode, frameSize, stereo));
 
           pointer = pointer.bytes(frameLength);
         }
 
         let frameRange = pointer;
-        frames.push(inspectFrame(frameRange));
+        frames.push(inspectFrame(frameRange, mode, frameSize, stereo));
       } else {
         assert.fail("CBR mode not implemented.");
       }
@@ -188,13 +262,15 @@ export function inspect(range: ByteRange): Tree {
     "Arbitrary Frames"
   ];
 
+  let [configTree, [mode, bandwidth, frameSize]] = inspectConfig(config);
+
   return new Tree(`Opus Packet`, range, [
-    inspectConfig(config),
+    configTree,
     new Tree(`Channels: ${s.readBool() ? "Stereo" : "Mono"}`, s),
     new Tree(
       `Frame Packing Mode: ${c.readUIntBE()} (${packingCodes[c.readUIntBE()]})`,
       c
     ),
-    inspectFrames(c.readUIntBE(), range.bytes(1))
+    inspectFrames(c.readUIntBE(), range.bytes(1), mode, frameSize, s.readBool())
   ]);
 }

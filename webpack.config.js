@@ -11,41 +11,41 @@ const INSPECTORS = [
     entry: "./src/inspectors/opus.tsx",
     title: "Opus Packet Inspector",
     subtitle: `Based off <a href='https://tools.ietf.org/html/rfc6716'>RFC 6716</a>`,
-    description: "A tool for dissecting Opus codec packets."
+    description: "A web-based tool for dissecting Opus codec packets."
   },
   {
     chunkName: "stun",
     entry: "./src/inspectors/stun.tsx",
     title: "STUN Packet Inspector",
     subtitle: `Based off <a href="https://tools.ietf.org/html/rfc5389">RFC 5389</a>`,
-    description: "A tool for dissecting STUN packets."
+    description: "A web-based tool for dissecting STUN packets."
   },
   {
     chunkName: "rtp",
     entry: "./src/inspectors/rtp.tsx",
     title: "RTP Packet Inspector",
     subtitle: `Based off <a href="https://tools.ietf.org/html/rfc3550">RFC 3550</a>.`,
-    description: "A tool for dissecting RTP packets."
+    description: "A web-based tool for dissecting RTP packets."
   },
   {
     chunkName: "rtcp",
     entry: "./src/inspectors/rtcp.tsx",
     title: "RTCP Packet Inspector",
-    description: "A tool for dissecting RTCP compound packets.",
+    description: "A web-based tool for dissecting RTCP compound packets.",
     subtitle: ""
   },
   {
     chunkName: "png",
     entry: "./src/inspectors/png.tsx",
     title: "PNG Format Inspector",
-    description: "A tool for inspecting PNG chunks.",
+    description: "A web-based tool for inspecting PNG chunks.",
     subtitle: ""
   },
   {
     chunkName: "ogg",
     entry: "./src/inspectors/ogg.tsx",
     title: "Ogg Format Inspector",
-    description: "A tool for inspecting Ogg pages.",
+    description: "A web-based tool for inspecting Ogg files.",
     subtitle: `Based off <a href="https://tools.ietf.org/html/rfc3533">RFC 3533</a>`
   }
 ];
