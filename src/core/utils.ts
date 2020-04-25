@@ -23,3 +23,7 @@ export function base64ToArrayBuffer(base64: string) {
   }
   return bytes.buffer;
 }
+
+export function splitLines(input: string): Array<string> {
+  return input.split(/\r?\n/g);
+}

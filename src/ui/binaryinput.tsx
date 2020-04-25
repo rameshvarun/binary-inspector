@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Tabs, Tab, Form, Card } from "react-bootstrap";
+import { Tabs, Tab, Form, Card, FormCheck, FormControl } from "react-bootstrap";
 
 import * as utils from "../core/utils";
 import Dropzone from "react-dropzone";
@@ -14,6 +14,9 @@ export class BinaryInput extends React.Component<{
   constructor(props) {
     super(props);
   }
+
+  hexIgnoreFirstColumn: React.RefObject<FormCheck<"input">> &
+    React.RefObject<HTMLInputElement> = React.createRef();
 
   render() {
     return (
@@ -30,9 +33,26 @@ export class BinaryInput extends React.Component<{
                 onChange={event => {
                   // @ts-ignore
                   let hex = event.target.value.trim();
+
+                  if (this.hexIgnoreFirstColumn.current!.checked) {
+                    let lines = utils.splitLines(hex);
+                    lines = lines.map(line =>
+                      line
+                        .split(/\s+/g)
+                        .slice(1)
+                        .join(" ")
+                    );
+                    hex = lines.join("\n");
+                  }
+
                   let buffer = utils.hexToArrayBuffer(hex);
                   this.props.onBuffer(buffer);
                 }}
+              />
+              <Form.Check
+                ref={this.hexIgnoreFirstColumn}
+                type="checkbox"
+                label="Ignore First Column"
               />
             </Form.Group>
           </Form>
