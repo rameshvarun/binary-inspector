@@ -5,6 +5,8 @@ import { ByteRange, BitRange } from "../core/range";
 const BYTES_PER_ROW = 16;
 const BYTES_PER_GROUP = 8;
 
+const MAX_ROWS = 1000;
+
 export class BinaryView extends React.Component<
   { data: ByteRange; selected?: ByteRange | BitRange },
   {}
@@ -15,6 +17,8 @@ export class BinaryView extends React.Component<
 
   render() {
     let data = this.props.data;
+    if (data.byteLength > MAX_ROWS * BYTES_PER_ROW)
+      return <div>File is too large for binary view.</div>;
 
     return (
       <div style={{ fontFamily: "monospace" }}>

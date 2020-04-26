@@ -30,6 +30,7 @@ export class TreeView extends React.Component<
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.tree != nextProps.tree) return true;
     if (this.props.selected != nextProps.selected) {
       let isBeingDeselected =
         !!this.props.selected &&
