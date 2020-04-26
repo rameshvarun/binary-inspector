@@ -15,6 +15,9 @@
   "author": "Varun Ramesh",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.9",
     "@types/jest": "^25.1.1",
     "chai": "^4.2.0",
     "query-string": "^6.10.1",
