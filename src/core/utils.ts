@@ -1,3 +1,5 @@
+import { ByteRange } from "./range";
+
 export function hexToArrayBuffer(hex: string) {
   return new Uint8Array(
     hex.match(/[\da-f]{2}/gi)!.map(function(h) {
@@ -26,4 +28,13 @@ export function base64ToArrayBuffer(base64: string) {
 
 export function splitLines(input: string): Array<string> {
   return input.split(/\r?\n/g);
+}
+
+export function hexEllipsis(data: ByteRange, maxLength: number = 10) {
+  if (data.byteLength > maxLength) {
+    data = data.bytes(0, maxLength);
+    return data.toHex() + "...";
+  } else {
+    return data.toHex();
+  }
 }

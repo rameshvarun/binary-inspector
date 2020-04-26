@@ -7,6 +7,8 @@ import { ByteRange, BitRange } from "../core/range";
 import { SimpleInspector } from "../ui/simpleinspector";
 import { Tree } from "../core/tree";
 
+import { hexEllipsis } from "../core/utils";
+
 function inspect(range: ByteRange): Tree {
   let signature = range.bytes(0, 8);
 
@@ -26,7 +28,7 @@ function inspect(range: ByteRange): Tree {
       new Tree(`Chunk (${type.readUTF8()})`, ptr.bytes(0, chunkSize), [
         new Tree(`Length: ${byteLen}`, length),
         new Tree(`Type: ${type.readUTF8()}`, type),
-        new Tree(`Data: ${data.toHex()}`, data),
+        new Tree(`Data: ${hexEllipsis(data)}`, data),
         new Tree(`CRC: ${crc.readUIntBE()}`, crc)
       ])
     );

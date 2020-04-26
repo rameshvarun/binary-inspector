@@ -154,7 +154,7 @@ function inspect(
     let payloadTree = parser.inspect(payload, payloadTypes);
     elements.push(new Tree(`Payload: ${parser.name}`, payload, [payloadTree]));
   } else {
-    elements.push(new Tree(`Payload: ${payload.toHex()}`, payload));
+    elements.push(new Tree(`Payload: ${utils.hexEllipsis(payload)}`, payload));
   }
 
   return new Tree(`RTP Packet`, packetRange, elements);
