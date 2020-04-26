@@ -22,6 +22,7 @@ import {
 } from "react-bootstrap";
 
 import * as opus from "../decoders/opus";
+import * as vp8 from "../decoders/vp8-rtp";
 import * as red from "../decoders/red";
 
 import * as persist from "../core/persist";
@@ -29,7 +30,7 @@ import * as utils from "../core/utils";
 
 const HEADER_EXTENSION_PARSERS = new Map();
 
-type PayloadParser = {
+export type PayloadParser = {
   name: string;
   id: string;
   inspect: (range: ByteRange, payloadTypes: Map<number, PayloadParser>) => Tree;
@@ -48,6 +49,12 @@ const PAYLOAD_PARSERS: Array<PayloadParser> = [
     id: "red",
     inspect: red.inspect,
     defaultPT: 108
+  },
+  {
+    name: "VP8 (RFC 7741)",
+    id: "vp8",
+    inspect: vp8.inspect,
+    defaultPT: 96
   }
 ];
 

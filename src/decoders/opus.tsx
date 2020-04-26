@@ -166,6 +166,11 @@ function inspectFrame(
 ): Tree {
   if (mode == Mode.SILK_ONLY) {
     return inspectSILKFrame(range, frameSize, stereo);
+  }
+  if (mode == Mode.HYBRID) {
+    return new Tree(`Hybrid Frame`, range, [
+      inspectSILKFrame(range, frameSize, stereo)
+    ]);
   } else {
     return new Tree(`Compressed Frame (${range.size()} bytes)`, range, []);
   }
