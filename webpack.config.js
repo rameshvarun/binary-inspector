@@ -47,6 +47,13 @@ const INSPECTORS = [
     title: "Ogg Format Inspector",
     description: "A web-based tool for inspecting Ogg files.",
     subtitle: `Based off <a href="https://tools.ietf.org/html/rfc3533">RFC 3533</a>`
+  },
+  {
+    chunkName: "bmff",
+    entry: "./src/inspectors/bmff.tsx",
+    title: "ISO BMFF Format Inspector",
+    description: "A web-based tool for inspecting ISO BMFF files.",
+    subtitle: `Based off of ISO standard.`
   }
 ];
 
