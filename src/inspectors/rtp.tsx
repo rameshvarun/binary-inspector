@@ -24,6 +24,7 @@ import {
 import * as opus from "../decoders/opus";
 import * as vp8 from "../decoders/vp8-rtp";
 import * as red from "../decoders/red";
+import * as ulpfec from "../decoders/ulpfec";
 
 import * as persist from "../core/persist";
 import * as utils from "../core/utils";
@@ -55,6 +56,12 @@ const PAYLOAD_PARSERS: Array<PayloadParser> = [
     id: "vp8",
     inspect: vp8.inspect,
     defaultPT: 96
+  },
+  {
+    name: "ULPFEC (RFC 5109)",
+    id: "ulpfec",
+    inspect: ulpfec.inspect,
+    defaultPT: 124
   }
 ];
 

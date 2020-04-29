@@ -54,6 +54,13 @@ const INSPECTORS = [
     title: "ISO BMFF Format Inspector",
     description: "A web-based tool for inspecting ISO BMFF files.",
     subtitle: `Based off of ISO standard.`
+  },
+  {
+    chunkName: "ulpfec",
+    entry: "./src/inspectors/ulpfec.tsx",
+    title: "ULPFEC Inspector",
+    description: "A web-based tool for inspecting ulpfec payloads.",
+    subtitle: `Based off of RFC 5109.`
   }
 ];
 
