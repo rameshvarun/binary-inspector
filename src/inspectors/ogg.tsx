@@ -7,7 +7,44 @@ import { ByteRange, BitRange } from "../core/range";
 import { SimpleInspector } from "../ui/simpleinspector";
 import { Tree } from "../core/tree";
 
-function inspectPage(range: ByteRange): [ByteRange, Tree] {
+interface StreamParser {
+  inspectPage(data: ByteRange): Tree;
+}
+
+class OpusStreamParser implements StreamParser {
+  state: "pre-header" | "comments" | "packet" = "pre-header";
+  inspectPage(range: ByteRange): Tree {
+    if (this.state == "pre-header") {
+      this.state = "comments";
+
+      let signature = range.bytes(0, 8);
+      let version = range.bytes(8, 1);
+
+      let channels = range.bytes(9, 1);
+      let preSkip = range.bytes(10, 2);
+
+      let sampleRate = range.bytes(12, 4);
+      let outputGain = range.bytes(16, 2);
+      let mappingFamily = range.bytes(18, 1);
+
+      return new Tree("Opus Header", range, [
+        new Tree(`Magic Signature: ${signature.readUTF8()}`, signature),
+        new Tree(`Version: ${version.readUIntLE()}`, version),
+        new Tree(`Channel Count: ${channels.readUIntLE()}`, channels),
+        new Tree(`Pre-skip: ${preSkip.readUIntLE()}`, preSkip),
+        new Tree(`Input Sample Rate: ${sampleRate.readUIntLE()}`, sampleRate),
+        new Tree(`Output Gain: ${outputGain.readUIntLE()}`, outputGain),
+        new Tree(`Mapping Family: ${mappingFamily.readUIntLE()}`, mappingFamily)
+      ]);
+    }
+    return new Tree("Unimplemented", range, [], new Error());
+  }
+}
+
+function inspectPage(
+  streams: Map<number, StreamParser>,
+  range: ByteRange
+): [ByteRange, Tree] {
   let pageStart = range.bytes(0, 4);
   if (pageStart.readUTF8() !== "OggS") {
     throw new Error(`Could not find magic page start header.`);
@@ -33,6 +70,7 @@ function inspectPage(range: ByteRange): [ByteRange, Tree] {
 
   let dataSize = lacingValues.reduce((a, b) => a + b.readUIntBE(), 0);
   let page = range.bytes(0, header.size() + dataSize);
+  let pageData = range.bytes(header.size(), dataSize);
 
   let segments: Array<Tree> = [];
   let ptr = range.bytes(header.size());
@@ -42,6 +80,16 @@ function inspectPage(range: ByteRange): [ByteRange, Tree] {
     segments.push(new Tree(`Segment`, segment));
 
     ptr = ptr.bytes(segmentSize);
+  }
+
+  // Look for stream headers.
+  if (pageData.size() >= 8 && pageData.bytes(0, 8).readUTF8() === "OpusHead") {
+    streams.set(serialNumber.readUIntLE(), new OpusStreamParser());
+  }
+
+  let dataTree = new Tree(`Page Data`, pageData);
+  if (streams.has(serialNumber.readUIntLE())) {
+    dataTree = streams.get(serialNumber.readUIntLE())!.inspectPage(pageData);
   }
 
   return [
@@ -69,17 +117,19 @@ function inspectPage(range: ByteRange): [ByteRange, Tree] {
         range.bytes(27, pageSegments.readUIntBE()),
         lacingValues.map(r => new Tree(`Lacing Value: ${r.readUIntBE()}`, r))
       ),
-      new Tree(`Segments`, range.bytes(header.size(), dataSize), segments)
+      new Tree(`Segments`, range.bytes(header.size(), dataSize), segments),
+      dataTree
     ])
   ];
 }
 
 function inspect(range: ByteRange): Tree {
+  let streams: Map<number, StreamParser> = new Map();
   let pages: Array<Tree> = [];
 
   let ptr = range;
   while (ptr.byteLength > 0) {
-    let [pageRange, pageTree] = inspectPage(ptr);
+    let [pageRange, pageTree] = inspectPage(streams, ptr);
 
     pages.push(pageTree);
     ptr = ptr.bytes(pageRange.size());
