@@ -7,15 +7,17 @@ import { ByteRange, BitRange } from "../core/range";
 import { SimpleInspector } from "../ui/simpleinspector";
 import { Tree } from "../core/tree";
 
+import * as opus from "../decoders/opus";
+
 interface StreamParser {
   inspectPage(data: ByteRange): Tree;
 }
 
 class OpusStreamParser implements StreamParser {
-  state: "pre-header" | "comments" | "packet" = "pre-header";
+  state: "pre-header" | "pre-comments" | "packets" = "pre-header";
   inspectPage(range: ByteRange): Tree {
     if (this.state == "pre-header") {
-      this.state = "comments";
+      this.state = "pre-comments";
 
       let signature = range.bytes(0, 8);
       let version = range.bytes(8, 1);
@@ -36,7 +38,17 @@ class OpusStreamParser implements StreamParser {
         new Tree(`Output Gain: ${outputGain.readUIntLE()}`, outputGain),
         new Tree(`Mapping Family: ${mappingFamily.readUIntLE()}`, mappingFamily)
       ]);
+    } else if (this.state === "pre-comments") {
+      this.state = "packets";
+      let signature = range.bytes(0, 8);
+
+      return new Tree("Comment Header", range, [
+        new Tree(`Magic Signature: ${signature.readUTF8()}`, signature)
+      ]);
+    } else if (this.state === "packets") {
+      return opus.inspect(range);
     }
+
     return new Tree("Unimplemented", range, [], new Error());
   }
 }
