@@ -5,6 +5,7 @@ import * as utils from "../core/utils";
 import Dropzone from "react-dropzone";
 
 import * as persist from "../core/persist";
+import { ElementType } from "react";
 
 export class BinaryInput extends React.Component<{
   inputName: string;
@@ -18,6 +19,28 @@ export class BinaryInput extends React.Component<{
   hexIgnoreFirstColumn: React.RefObject<FormCheck<"input">> &
     React.RefObject<HTMLInputElement> = React.createRef();
 
+  hexInput: React.RefObject<FormControl<ElementType<any>>> &
+    React.RefObject<HTMLTextAreaElement> = React.createRef();
+
+  onHexChange() {
+    // @ts-ignore
+    let hex = this.hexInput.current!.value.trim();
+
+    if (this.hexIgnoreFirstColumn.current!.checked) {
+      let lines = utils.splitLines(hex);
+      lines = lines.map(line =>
+        line
+          .split(/\s+/g)
+          .slice(1)
+          .join(" ")
+      );
+      hex = lines.join("\n");
+    }
+
+    let buffer = utils.hexToArrayBuffer(hex);
+    this.props.onBuffer(buffer);
+  }
+
   render() {
     return (
       <Tabs
@@ -30,29 +53,14 @@ export class BinaryInput extends React.Component<{
               <Form.Control
                 as="textarea"
                 rows="3"
-                onChange={event => {
-                  // @ts-ignore
-                  let hex = event.target.value.trim();
-
-                  if (this.hexIgnoreFirstColumn.current!.checked) {
-                    let lines = utils.splitLines(hex);
-                    lines = lines.map(line =>
-                      line
-                        .split(/\s+/g)
-                        .slice(1)
-                        .join(" ")
-                    );
-                    hex = lines.join("\n");
-                  }
-
-                  let buffer = utils.hexToArrayBuffer(hex);
-                  this.props.onBuffer(buffer);
-                }}
+                ref={this.hexInput}
+                onChange={() => this.onHexChange()}
               />
               <Form.Check
                 ref={this.hexIgnoreFirstColumn}
                 type="checkbox"
                 label="Ignore First Column"
+                onChange={() => this.onHexChange()}
               />
             </Form.Group>
           </Form>
