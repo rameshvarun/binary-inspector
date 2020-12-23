@@ -53,6 +53,106 @@ class OpusStreamParser implements StreamParser {
   }
 }
 
+// Specification at https://www.theora.org/doc/Theora.pdf
+class TheoraStreamParser implements StreamParser {
+  state: "pre-header" | "pre-comments" = "pre-header";
+  inspectPage(range: ByteRange): Tree {
+    if (this.state == "pre-header") {
+      this.state = "pre-comments";
+
+      let headerType = range.bytes(0, 1);
+      let headerMagic = range.bytes(1, 6);
+
+      let version = range.bytes(7, 3);
+      let vmaj = range.bytes(7, 1);
+      let vmin = range.bytes(8, 1);
+      let vrev = range.bytes(9, 1);
+
+      let fmbw = range.bytes(10, 2);
+      let fmbh = range.bytes(12, 2);
+
+      let picw = range.bytes(14, 3);
+      let pich = range.bytes(17, 3);
+
+      let picx = range.bytes(20, 1);
+      let picy = range.bytes(21, 1);
+
+      let framerate = range.bytes(22, 8);
+      let frn = range.bytes(22, 4);
+      let frd = range.bytes(26, 4);
+
+      let pixelar = range.bytes(30, 6);
+      let parn = range.bytes(30, 3);
+      let pard = range.bytes(33, 3);
+
+      let cs = range.bytes(36, 1);
+      let nombr = range.bytes(37, 3);
+
+      let packed = range.bytes(40, 2);
+      let qual = packed.bits(0, 6);
+      let kfgshift = packed.bits(6, 5);
+      let pf = packed.bits(11, 2);
+      let res = packed.bits(13, 3);
+
+      return new Tree("Theora Identification Header", range, [
+        new Tree(`Header Type: ${headerType.toHex()}`, headerType),
+        new Tree(`Header Magic: ${headerMagic.readUTF8()}`, headerMagic),
+
+        new Tree(
+          `Version: ${vmaj.readUIntBE()}.${vmaj.readUIntBE()}.${vmaj.readUIntBE()}`,
+          version,
+          [
+            new Tree(`Major Version: ${vmaj.readUIntBE()}`, vmaj),
+            new Tree(`Minor Version: ${vmaj.readUIntBE()}`, vmin),
+            new Tree(`Revision Version: ${vmaj.readUIntBE()}`, vrev)
+          ]
+        ),
+
+        new Tree(`Frame Width (Macro Blocks): ${fmbw.readUIntBE()}`, fmbw),
+        new Tree(`Frame Height (Macro Blocks): ${fmbh.readUIntBE()}`, fmbh),
+
+        new Tree(`Picture Width (pixels): ${picw.readUIntBE()}`, picw),
+        new Tree(`Picture Height (pixels): ${pich.readUIntBE()}`, pich),
+
+        new Tree(`Picture Offset X (pixels): ${picx.readUIntBE()}`, picx),
+        new Tree(`Picture Offset Y (pixels): ${picy.readUIntBE()}`, picy),
+
+        new Tree(
+          `Framerate: ${frn.readUIntBE() / frd.readUIntBE()}`,
+          framerate,
+          [
+            new Tree(`Framerate Numerator: ${frn.readUIntBE()}`, frn),
+            new Tree(`Framerate Denominator: ${frd.readUIntBE()}`, frd)
+          ]
+        ),
+
+        new Tree(
+          `Pixel Aspect Ratio: ${parn.readUIntBE() / pard.readUIntBE()}`,
+          pixelar,
+          [
+            new Tree(
+              `Pixel Aspect Ratio Numerator: ${parn.readUIntBE()}`,
+              parn
+            ),
+            new Tree(
+              `Pixel Aspect Ratio Denominator: ${pard.readUIntBE()}`,
+              pard
+            )
+          ]
+        ),
+
+        new Tree(`Color Space: ${cs.readUIntBE()}`, cs),
+        new Tree(`Nominal Bitrate: ${nombr.readUIntBE()}`, nombr),
+
+        new Tree(`Quality Hint: ${qual.readUIntBE()}`, qual),
+        new Tree(`Keyframe Granule Shift: ${kfgshift.readUIntBE()}`, kfgshift),
+        new Tree(`Pixel Format: ${pf.readUIntBE()}`, pf)
+      ]);
+    }
+    return new Tree("Unimplemented", range, [], new Error());
+  }
+}
+
 function inspectPage(
   streams: Map<number, StreamParser>,
   range: ByteRange
@@ -97,7 +197,14 @@ function inspectPage(
   // Look for stream headers.
   if (pageData.size() >= 8 && pageData.bytes(0, 8).readUTF8() === "OpusHead") {
     streams.set(serialNumber.readUIntLE(), new OpusStreamParser());
+  } else if (
+    pageData.size() >= 7 &&
+    pageData.bytes(0, 1).readUIntBE() === 128 &&
+    pageData.bytes(1, 6).readUTF8() === "theora"
+  ) {
+    streams.set(serialNumber.readUIntLE(), new TheoraStreamParser());
   }
+  // console.log(pageData.bytes(1, 6).readUTF8())
 
   let dataTree = new Tree(`Page Data`, pageData);
   if (streams.has(serialNumber.readUIntLE())) {

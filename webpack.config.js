@@ -61,6 +61,13 @@ const INSPECTORS = [
     title: "ULPFEC Inspector",
     description: "A web-based tool for inspecting ulpfec payloads.",
     subtitle: `Based off of RFC 5109.`
+  },
+  {
+    chunkName: "riff",
+    entry: "./src/inspectors/riff.tsx",
+    title: "RIFF Container Inspector",
+    description: "A web-based tool for inspecting RIFF container files.",
+    subtitle: `Based off of Multimedia Programming Interface and Data Specifications 1.0.`
   }
 ];
 
