@@ -68,6 +68,13 @@ const INSPECTORS = [
     title: "RIFF Container Inspector",
     description: "A web-based tool for inspecting RIFF container files.",
     subtitle: `Based off of Multimedia Programming Interface and Data Specifications 1.0.`
+  },
+  {
+    chunkName: "custom",
+    entry: "./src/inspectors/custom.tsx",
+    title: "Custom Data Inspector",
+    description: "",
+    subtitle: ``
   }
 ];
 
