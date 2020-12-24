@@ -48,6 +48,18 @@ function inspect(range: ByteRange): Tree {
   return new Tree(`Test Tree`, range, []);
 }
 
+function LoadCSS(href, integrity) {
+  return new Promise((resolve, reject) => {
+    let link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    link.crossOrigin = "anonymous";
+    link.integrity = integrity;
+    link.onload = () => resolve();
+    document.head.appendChild(link);
+  });
+}
+
 function LoadScript(href, integrity) {
   return new Promise((resolve, reject) => {
     let script = document.createElement("script");
@@ -60,16 +72,22 @@ function LoadScript(href, integrity) {
   });
 }
 
-const aceEditor = LoadScript(
-  "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js",
-  "sha512-GoORoNnxst42zE3rYPj4bNBm0Q6ZRXKNH2D9nEmNvVF/z24ywVnijAWVi/09iBiVDQVf3UlZHpzhAJIdd9BXqw=="
-).then(() =>
+const codeMirror = Promise.all([
   LoadScript(
-    "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-javascript.min.js",
-    "sha512-ZxMbXDxB0Whct+zt+DeW/RZaBv33N5D7myNFtBGiqpDSFRLxn2CNp6An0A1zUAJU/+bl8CMVrwxwnFcpFi3yTQ=="
+    "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.0/codemirror.min.js",
+    "sha512-guAOPzMlYhWXne9TpfFRWD7iI0YnDTVqNN8fNgZGeqcmZFuUKWxD1/74Rsse81voD2uzxyBJkkp97G/tahKipg=="
+  ),
+  LoadScript(
+    "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.0/mode/javascript/javascript.min.js",
+    "sha512-ZV6RoI4VtjC2qr4NUVLAXqcUjEtxgD1mxx05KrDXI6iU8fFh61XU/PhQzYZGap0ueg4mvLqbNzKPHLoow3U+5A=="
+  ),
+  LoadCSS(
+    "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.0/codemirror.min.css",
+    "sha512-MWdvo/Qqcf4pY1ecQUB1uBn0qLp19U/qJ1Rpp2BDZeuBA7YsFEwkvqR/+aG4BroPiAYDunKJ6X8R/Pmdt3p7oA=="
   )
-);
+]);
 
+// Install classes into the local namespace for the eval'ed code to be able to access.
 // @ts-ignore
 window.Tree = Tree;
 
@@ -88,18 +106,19 @@ class CustomInspector extends React.Component<{}, CustomInspectorState> {
   }
 
   componentDidMount() {
-    aceEditor.then(() => {
+    codeMirror.then(() => {
       // @ts-ignore
-      document.getElementById("code-editor-textarea")?.style.display = "none";
-      // @ts-ignore
-      document.getElementById("code-editor")?.style.display = "block";
-      // @ts-ignore
-      let editor = ace.edit("code-editor");
-      // @ts-ignore
-      editor
-        .getSession()
-        .setValue(document.getElementById("code-editor-textarea")?.value);
-      editor.session.setMode("ace/mode/javascript");
+      let editor = CodeMirror.fromTextArea(
+        document.getElementById("code-editor-textarea"),
+        {
+          lineNumbers: true,
+          mode: "javascript"
+        }
+      );
+
+      editor.on("change", () => {
+        this.loadCode(editor.getValue());
+      });
     });
 
     if (persist.has("data")) {
@@ -178,10 +197,6 @@ class CustomInspector extends React.Component<{}, CustomInspectorState> {
                 persist.has("code") ? persist.get("code") : DEFAULT_CODE
               }
             />
-            <div
-              style={{ width: "100%", height: "500px", display: "none" }}
-              id="code-editor"
-            ></div>
           </Col>
           <Col md={6}>
             {" "}
