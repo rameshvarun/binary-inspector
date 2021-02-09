@@ -92,6 +92,10 @@ export class ByteRange {
     return number;
   }
 
+  readFloat32LE(): number {
+    return this.toDataView().getFloat32(0, true);
+  }
+
   chunks(size: number): Array<ByteRange> {
     let chunks: Array<ByteRange> = [];
     let cursor = 0;

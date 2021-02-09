@@ -70,6 +70,20 @@ const INSPECTORS = [
     subtitle: `Based off of Multimedia Programming Interface and Data Specifications 1.0.`
   },
   {
+    chunkName: "q3bsp",
+    entry: "./src/inspectors/q3bsp.tsx",
+    title: "Quake 3 BSP Inspector",
+    description: "A web-based tool for inspecting Quake 3 BSP files.",
+    subtitle: ``
+  },
+  {
+    chunkName: "pak",
+    entry: "./src/inspectors/pak.tsx",
+    title: "Quake PAK Inspector",
+    description: "A web-based tool for inspecting Quake PAK files.",
+    subtitle: ``
+  },
+  {
     chunkName: "custom",
     entry: "./src/inspectors/custom.tsx",
     title: "Custom Data Inspector",
