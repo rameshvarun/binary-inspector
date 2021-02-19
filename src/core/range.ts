@@ -60,8 +60,8 @@ export class ByteRange {
 
   bits(bitStart: number, bits?: number) {
     let actualBitStart = this.byteStart * 8 + bitStart;
-    if (bits == null) {
-      bits = this.byteLength * 8 - actualBitStart;
+    if (bits === undefined) {
+      bits = (this.byteStart + this.byteLength) * 8 - actualBitStart;
     }
 
     return new BitRange(this.buffer, actualBitStart, bits);
@@ -156,5 +156,22 @@ export class BitRange {
     }
 
     return new BitRange(this.buffer, this.bitStart + bitStart, bitLength);
+  }
+
+  chunks(size: number): Array<BitRange> {
+    let chunks: Array<BitRange> = [];
+    let cursor = 0;
+    while (cursor < this.bitLength) {
+      chunks.push(this.bits(cursor, Math.min(size, this.bitLength - cursor)));
+      cursor += size;
+    }
+    return chunks;
+  }
+
+  contains(other: BitRange) {
+    return (
+      other.bitStart >= this.bitStart &&
+      other.bitStart + other.bitLength <= this.bitStart + this.bitLength
+    );
   }
 }

@@ -221,8 +221,8 @@ function inspectFrames(
       let M = info.bits(2, 6);
 
       frames.push(new Tree(`Mode: ${v.readBool() ? "VBR" : "CBR"}`, v));
-      frames.push(new Tree(`Padding: ${p.readBool()}`, v));
-      frames.push(new Tree(`Frame Count: ${M.readUIntBE()}`, v));
+      frames.push(new Tree(`Padding: ${p.readBool()}`, p));
+      frames.push(new Tree(`Frame Count: ${M.readUIntBE()}`, M));
 
       if (p.readBool()) assert.fail("Frame padding not implemented.");
       if (v.readBool()) {
@@ -237,7 +237,7 @@ function inspectFrames(
         frames.push(
           new Tree(
             `Frame Lengths: ${frameLengths.length}`,
-            range.bytes(1, pointer.byteStart - info.byteStart),
+            range.bytes(1, pointer.byteStart - frameLengths[0][1].byteStart),
             frameLengths.map(
               f => new Tree(`${f[1].size()}-byte Frame Length: ${f[0]}`, f[1])
             )
