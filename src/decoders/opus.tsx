@@ -133,7 +133,7 @@ function inspectSILKFrame(
 
       headerTree.push(
         new Tree(
-          `${channelNames[i]}, Frame ${i + 1}, VAD Flag: ${vadFlag.readBool()}`,
+          `${channelNames[i]}, Frame ${j + 1}, VAD Flag: ${vadFlag.readBool()}`,
           vadFlag
         )
       );
