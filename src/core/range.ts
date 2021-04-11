@@ -96,6 +96,14 @@ export class ByteRange {
     return this.toDataView().getFloat32(0, true);
   }
 
+  readFloat32BE(): number {
+    return this.toDataView().getFloat32(0, false);
+  }
+
+  readFloat64BE(): number {
+    return this.toDataView().getFloat64(0, false);
+  }
+
   chunks(size: number): Array<ByteRange> {
     let chunks: Array<ByteRange> = [];
     let cursor = 0;
@@ -104,6 +112,21 @@ export class ByteRange {
       cursor += size;
     }
     return chunks;
+  }
+
+  merge(other: ByteRange): ByteRange {
+    assert.equal(
+      this.buffer,
+      other.buffer,
+      "Can only merge ranges over the same buffer."
+    );
+    let start = Math.min(this.byteStart, other.byteStart);
+    let end = Math.max(
+      this.byteStart + this.byteLength,
+      other.byteStart + other.byteLength
+    );
+
+    return new ByteRange(this.buffer, start, end - start);
   }
 }
 

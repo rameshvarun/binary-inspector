@@ -84,6 +84,13 @@ const INSPECTORS = [
     subtitle: ``
   },
   {
+    chunkName: "msgpack",
+    entry: "./src/inspectors/msgpack.tsx",
+    title: "Msgpack Inspector",
+    description: "A web based tool for inspecting msgpack payloads.",
+    subtitle: `Based off of the <a href='https://github.com/msgpack/msgpack/blob/master/spec.md'>Msgpack Spec</a>`
+  },
+  {
     chunkName: "custom",
     entry: "./src/inspectors/custom.tsx",
     title: "Custom Data Inspector",
