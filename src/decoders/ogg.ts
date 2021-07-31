@@ -38,8 +38,51 @@ class OpusStreamParser implements StreamParser {
       this.state = "packets";
       let signature = range.bytes(0, 8);
 
+      let vendorStringLength = range.bytes(8, 4);
+      let vendorString = range.bytes(12, vendorStringLength.readUIntLE());
+
+      let userCommentListLength = range.bytes(
+        12 + vendorStringLength.readUIntLE(),
+        4
+      );
+
+      let userCommentsRange = range.bytes(
+        12 + vendorStringLength.readUIntLE() + 4
+      );
+      let ptr = userCommentsRange;
+      let userComments: Array<Tree> = [];
+      for (let i = 0; i < userCommentListLength.readUIntLE(); ++i) {
+        let commentLength = ptr.bytes(0, 4);
+        let commentString = ptr.bytes(4, commentLength.readUIntLE());
+
+        userComments.push(
+          new Tree(
+            `User Comment #${i + 1} Length: ${commentLength.readUIntLE()}`,
+            commentLength
+          )
+        );
+        userComments.push(
+          new Tree(
+            `User Comment #${i + 1}: ${commentString.readUTF8()}`,
+            commentString
+          )
+        );
+
+        ptr = ptr.bytes(4 + commentLength.readUIntLE());
+      }
+
       return new Tree("Comment Header", range, [
-        new Tree(`Magic Signature: ${signature.readUTF8()}`, signature)
+        new Tree(`Magic Signature: ${signature.readUTF8()}`, signature),
+        new Tree(
+          `Vendor String Length: ${vendorStringLength.readUIntLE()}`,
+          vendorStringLength
+        ),
+        new Tree(`Vendor String: ${vendorString.readUTF8()}`, vendorString),
+        new Tree(
+          `User Comment List Length: ${userCommentListLength.readUIntLE()}`,
+          userCommentListLength
+        ),
+        new Tree(`User Comments`, userCommentsRange, userComments)
       ]);
     } else if (this.state === "packets") {
       return new Tree(

@@ -387,6 +387,73 @@ Tree {
                 "byteStart": 75,
               },
             },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Vendor String Length: 13",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 4,
+                "byteStart": 83,
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Vendor String: Lavf58.76.100",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 13,
+                "byteStart": 87,
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "User Comment List Length: 1",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 4,
+                "byteStart": 100,
+              },
+            },
+            Tree {
+              "children": Array [
+                Tree {
+                  "children": Array [],
+                  "error": undefined,
+                  "label": "User Comment #1 Length: 30",
+                  "parent": [Circular],
+                  "range": ByteRange {
+                    "buffer": ArrayBuffer [],
+                    "byteLength": 4,
+                    "byteStart": 104,
+                  },
+                },
+                Tree {
+                  "children": Array [],
+                  "error": undefined,
+                  "label": "User Comment #1: encoder=Lavc58.134.100 libopus",
+                  "parent": [Circular],
+                  "range": ByteRange {
+                    "buffer": ArrayBuffer [],
+                    "byteLength": 30,
+                    "byteStart": 108,
+                  },
+                },
+              ],
+              "error": undefined,
+              "label": "User Comments",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 34,
+                "byteStart": 104,
+              },
+            },
           ],
           "error": undefined,
           "label": "Comment Header",
