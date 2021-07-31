@@ -50,61 +50,67 @@ function inspectFixstr(range: ByteRange): [Tree, ByteRange] {
 }
 
 function inspectPositiveFixnum(range: ByteRange): [Tree, ByteRange] {
-    const tag = range.bits(0, 1);
-    const value = range.bits(1, 7);
-    return [new Tree(`Fixnum (${value.readUIntBE()})`, range.bytes(0, 1), [
-        new Tree("Tag", tag),
-        new Tree("Value", value),
-    ]), range.bytes(1)];
+  const tag = range.bits(0, 1);
+  const value = range.bits(1, 7);
+  return [
+    new Tree(`Fixnum (${value.readUIntBE()})`, range.bytes(0, 1), [
+      new Tree("Tag", tag),
+      new Tree("Value", value)
+    ]),
+    range.bytes(1)
+  ];
 }
 
 function inspectUint8(range: ByteRange): [Tree, ByteRange] {
-    const tag = range.bytes(0, 1);
-    const value = range.bytes(1, 1);
-    return [new Tree(`uint 8 (${value.readUIntBE()})`, range.bytes(0, 2), [
-        new Tree("Tag", tag),
-        new Tree("Value", value),
-    ]), range.bytes(2)];
+  const tag = range.bytes(0, 1);
+  const value = range.bytes(1, 1);
+  return [
+    new Tree(`uint 8 (${value.readUIntBE()})`, range.bytes(0, 2), [
+      new Tree("Tag", tag),
+      new Tree("Value", value)
+    ]),
+    range.bytes(2)
+  ];
 }
 
 function inspectFloat64(range: ByteRange): [Tree, ByteRange] {
-    const tag = range.bytes(0, 1);
-    const value = range.bytes(1, 8);
-    return [new Tree(`float64 (${value.readFloat64BE()})`, range.bytes(0, 9), [
-        new Tree("Tag", tag),
-        new Tree("Value", value),
-    ]), range.bytes(9)];
+  const tag = range.bytes(0, 1);
+  const value = range.bytes(1, 8);
+  return [
+    new Tree(`float64 (${value.readFloat64BE()})`, range.bytes(0, 9), [
+      new Tree("Tag", tag),
+      new Tree("Value", value)
+    ]),
+    range.bytes(9)
+  ];
 }
 
 function inspectFixarray(range: ByteRange): [Tree, ByteRange] {
-    const tag = range.bits(0, 4);
-    const n = range.bits(4, 4);
+  const tag = range.bits(0, 4);
+  const n = range.bits(4, 4);
 
-    const entries: Array<Tree> = [];
-    let ptr = range.bytes(1);
-    for (let i = 0; i < n.readUIntBE(); ++i) {
-      let entry: Tree;
-      [entry, ptr] = inspectValue(ptr);
-      entries.push(entry);
-    }
+  const entries: Array<Tree> = [];
+  let ptr = range.bytes(1);
+  for (let i = 0; i < n.readUIntBE(); ++i) {
+    let entry: Tree;
+    [entry, ptr] = inspectValue(ptr);
+    entries.push(entry);
+  }
 
-    const arrayRange = range.bytes(0, ptr.byteStart - range.byteStart);
+  const arrayRange = range.bytes(0, ptr.byteStart - range.byteStart);
 
-    return [
-      new Tree(
-        `Fixarray, n=${n.readUIntBE()}`,
-        arrayRange,
-        [new Tree(`Tag`, tag), new Tree("n", n)].concat(entries)
-      ),
-      ptr
-    ];
+  return [
+    new Tree(
+      `Fixarray, n=${n.readUIntBE()}`,
+      arrayRange,
+      [new Tree(`Tag`, tag), new Tree("n", n)].concat(entries)
+    ),
+    ptr
+  ];
 }
 
 function inspectNil(range: ByteRange): [Tree, ByteRange] {
-    return [
-        new Tree(`Nil`, range.bytes(0, 1)),
-        range.bytes(1)
-    ]
+  return [new Tree(`Nil`, range.bytes(0, 1)), range.bytes(1)];
 }
 
 function inspectValue(range: ByteRange): [Tree, ByteRange] {
@@ -125,7 +131,6 @@ function inspectValue(range: ByteRange): [Tree, ByteRange] {
   } else {
     throw new Error(`Unimplemented type code: ${range.bytes(0, 1).toHex()}`);
   }
-
 }
 
 function inspect(range: ByteRange): Tree {
