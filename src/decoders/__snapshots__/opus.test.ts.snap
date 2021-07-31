@@ -1,0 +1,627 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`inspect 1`] = `
+Tree {
+  "children": Array [
+    Tree {
+      "children": Array [
+        Tree {
+          "children": Array [],
+          "error": undefined,
+          "label": "Mode: SILK-only",
+          "parent": [Circular],
+          "range": BitRange {
+            "bitLength": 5,
+            "bitStart": 0,
+            "buffer": ArrayBuffer [],
+          },
+        },
+        Tree {
+          "children": Array [],
+          "error": undefined,
+          "label": "Bandwidth: WB (8000Hz), Sample Rate: 16000Hz",
+          "parent": [Circular],
+          "range": BitRange {
+            "bitLength": 5,
+            "bitStart": 0,
+            "buffer": ArrayBuffer [],
+          },
+        },
+        Tree {
+          "children": Array [],
+          "error": undefined,
+          "label": "Frame Size: 20ms",
+          "parent": [Circular],
+          "range": BitRange {
+            "bitLength": 5,
+            "bitStart": 0,
+            "buffer": ArrayBuffer [],
+          },
+        },
+      ],
+      "error": undefined,
+      "label": "Config: 9 (SILK-only, WB, 20ms)",
+      "parent": [Circular],
+      "range": BitRange {
+        "bitLength": 5,
+        "bitStart": 0,
+        "buffer": ArrayBuffer [],
+      },
+    },
+    Tree {
+      "children": Array [],
+      "error": undefined,
+      "label": "Channels: Mono",
+      "parent": [Circular],
+      "range": BitRange {
+        "bitLength": 1,
+        "bitStart": 5,
+        "buffer": ArrayBuffer [],
+      },
+    },
+    Tree {
+      "children": Array [],
+      "error": undefined,
+      "label": "Frame Packing Mode: 3 (Arbitrary Frames)",
+      "parent": [Circular],
+      "range": BitRange {
+        "bitLength": 2,
+        "bitStart": 6,
+        "buffer": ArrayBuffer [],
+      },
+    },
+    Tree {
+      "children": Array [
+        Tree {
+          "children": Array [],
+          "error": undefined,
+          "label": "Mode: VBR",
+          "parent": [Circular],
+          "range": BitRange {
+            "bitLength": 1,
+            "bitStart": 8,
+            "buffer": ArrayBuffer [],
+          },
+        },
+        Tree {
+          "children": Array [],
+          "error": undefined,
+          "label": "Padding: false",
+          "parent": [Circular],
+          "range": BitRange {
+            "bitLength": 1,
+            "bitStart": 9,
+            "buffer": ArrayBuffer [],
+          },
+        },
+        Tree {
+          "children": Array [],
+          "error": undefined,
+          "label": "Frame Count: 8",
+          "parent": [Circular],
+          "range": BitRange {
+            "bitLength": 6,
+            "bitStart": 10,
+            "buffer": ArrayBuffer [],
+          },
+        },
+        Tree {
+          "children": Array [
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "1-byte Frame Length: 47",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 1,
+                "byteStart": 2,
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "1-byte Frame Length: 48",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 1,
+                "byteStart": 3,
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "1-byte Frame Length: 45",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 1,
+                "byteStart": 4,
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "1-byte Frame Length: 44",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 1,
+                "byteStart": 5,
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "1-byte Frame Length: 47",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 1,
+                "byteStart": 6,
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "1-byte Frame Length: 35",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 1,
+                "byteStart": 7,
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "1-byte Frame Length: 37",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 1,
+                "byteStart": 8,
+              },
+            },
+          ],
+          "error": undefined,
+          "label": "Frame Lengths: 7",
+          "parent": [Circular],
+          "range": ByteRange {
+            "buffer": ArrayBuffer [],
+            "byteLength": 7,
+            "byteStart": 2,
+          },
+        },
+        Tree {
+          "children": Array [
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, Frame 1, VAD Flag: true",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 72,
+                "buffer": ArrayBuffer [],
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, LBRR Flag: false",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 73,
+                "buffer": ArrayBuffer [],
+              },
+            },
+          ],
+          "error": undefined,
+          "label": "SILK Frame (1 SILK Frames)",
+          "parent": [Circular],
+          "range": ByteRange {
+            "buffer": ArrayBuffer [],
+            "byteLength": 47,
+            "byteStart": 9,
+          },
+        },
+        Tree {
+          "children": Array [
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, Frame 1, VAD Flag: true",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 448,
+                "buffer": ArrayBuffer [],
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, LBRR Flag: false",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 449,
+                "buffer": ArrayBuffer [],
+              },
+            },
+          ],
+          "error": undefined,
+          "label": "SILK Frame (1 SILK Frames)",
+          "parent": [Circular],
+          "range": ByteRange {
+            "buffer": ArrayBuffer [],
+            "byteLength": 48,
+            "byteStart": 56,
+          },
+        },
+        Tree {
+          "children": Array [
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, Frame 1, VAD Flag: true",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 832,
+                "buffer": ArrayBuffer [],
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, LBRR Flag: false",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 833,
+                "buffer": ArrayBuffer [],
+              },
+            },
+          ],
+          "error": undefined,
+          "label": "SILK Frame (1 SILK Frames)",
+          "parent": [Circular],
+          "range": ByteRange {
+            "buffer": ArrayBuffer [],
+            "byteLength": 45,
+            "byteStart": 104,
+          },
+        },
+        Tree {
+          "children": Array [
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, Frame 1, VAD Flag: true",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 1192,
+                "buffer": ArrayBuffer [],
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, LBRR Flag: false",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 1193,
+                "buffer": ArrayBuffer [],
+              },
+            },
+          ],
+          "error": undefined,
+          "label": "SILK Frame (1 SILK Frames)",
+          "parent": [Circular],
+          "range": ByteRange {
+            "buffer": ArrayBuffer [],
+            "byteLength": 44,
+            "byteStart": 149,
+          },
+        },
+        Tree {
+          "children": Array [
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, Frame 1, VAD Flag: true",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 1544,
+                "buffer": ArrayBuffer [],
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, LBRR Flag: false",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 1545,
+                "buffer": ArrayBuffer [],
+              },
+            },
+          ],
+          "error": undefined,
+          "label": "SILK Frame (1 SILK Frames)",
+          "parent": [Circular],
+          "range": ByteRange {
+            "buffer": ArrayBuffer [],
+            "byteLength": 47,
+            "byteStart": 193,
+          },
+        },
+        Tree {
+          "children": Array [
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, Frame 1, VAD Flag: false",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 1920,
+                "buffer": ArrayBuffer [],
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, LBRR Flag: false",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 1921,
+                "buffer": ArrayBuffer [],
+              },
+            },
+          ],
+          "error": undefined,
+          "label": "SILK Frame (1 SILK Frames)",
+          "parent": [Circular],
+          "range": ByteRange {
+            "buffer": ArrayBuffer [],
+            "byteLength": 35,
+            "byteStart": 240,
+          },
+        },
+        Tree {
+          "children": Array [
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, Frame 1, VAD Flag: false",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 2200,
+                "buffer": ArrayBuffer [],
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, LBRR Flag: false",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 2201,
+                "buffer": ArrayBuffer [],
+              },
+            },
+          ],
+          "error": undefined,
+          "label": "SILK Frame (1 SILK Frames)",
+          "parent": [Circular],
+          "range": ByteRange {
+            "buffer": ArrayBuffer [],
+            "byteLength": 37,
+            "byteStart": 275,
+          },
+        },
+        Tree {
+          "children": Array [
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, Frame 1, VAD Flag: false",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 2496,
+                "buffer": ArrayBuffer [],
+              },
+            },
+            Tree {
+              "children": Array [],
+              "error": undefined,
+              "label": "Mono, LBRR Flag: false",
+              "parent": [Circular],
+              "range": BitRange {
+                "bitLength": 1,
+                "bitStart": 2497,
+                "buffer": ArrayBuffer [],
+              },
+            },
+          ],
+          "error": undefined,
+          "label": "SILK Frame (1 SILK Frames)",
+          "parent": [Circular],
+          "range": ByteRange {
+            "buffer": ArrayBuffer [],
+            "byteLength": 36,
+            "byteStart": 312,
+          },
+        },
+      ],
+      "error": undefined,
+      "label": "Compressed Frames",
+      "parent": [Circular],
+      "range": ByteRange {
+        "buffer": ArrayBuffer [],
+        "byteLength": 347,
+        "byteStart": 1,
+      },
+    },
+  ],
+  "error": undefined,
+  "label": "Opus Packet",
+  "range": ByteRange {
+    "buffer": ArrayBuffer [],
+    "byteLength": 348,
+    "byteStart": 0,
+  },
+}
+`;
+
+exports[`inspect 2`] = `
+Tree {
+  "children": Array [
+    Tree {
+      "children": Array [
+        Tree {
+          "children": Array [],
+          "error": undefined,
+          "label": "Mode: Hybrid",
+          "parent": [Circular],
+          "range": BitRange {
+            "bitLength": 5,
+            "bitStart": 0,
+            "buffer": ArrayBuffer [],
+          },
+        },
+        Tree {
+          "children": Array [],
+          "error": undefined,
+          "label": "Bandwidth: FB (20000Hz), Sample Rate: 48000Hz",
+          "parent": [Circular],
+          "range": BitRange {
+            "bitLength": 5,
+            "bitStart": 0,
+            "buffer": ArrayBuffer [],
+          },
+        },
+        Tree {
+          "children": Array [],
+          "error": undefined,
+          "label": "Frame Size: 20ms",
+          "parent": [Circular],
+          "range": BitRange {
+            "bitLength": 5,
+            "bitStart": 0,
+            "buffer": ArrayBuffer [],
+          },
+        },
+      ],
+      "error": undefined,
+      "label": "Config: 15 (Hybrid, FB, 20ms)",
+      "parent": [Circular],
+      "range": BitRange {
+        "bitLength": 5,
+        "bitStart": 0,
+        "buffer": ArrayBuffer [],
+      },
+    },
+    Tree {
+      "children": Array [],
+      "error": undefined,
+      "label": "Channels: Mono",
+      "parent": [Circular],
+      "range": BitRange {
+        "bitLength": 1,
+        "bitStart": 5,
+        "buffer": ArrayBuffer [],
+      },
+    },
+    Tree {
+      "children": Array [],
+      "error": undefined,
+      "label": "Frame Packing Mode: 0 (1 Frame)",
+      "parent": [Circular],
+      "range": BitRange {
+        "bitLength": 2,
+        "bitStart": 6,
+        "buffer": ArrayBuffer [],
+      },
+    },
+    Tree {
+      "children": Array [
+        Tree {
+          "children": Array [
+            Tree {
+              "children": Array [
+                Tree {
+                  "children": Array [],
+                  "error": undefined,
+                  "label": "Mono, Frame 1, VAD Flag: false",
+                  "parent": [Circular],
+                  "range": BitRange {
+                    "bitLength": 1,
+                    "bitStart": 8,
+                    "buffer": ArrayBuffer [],
+                  },
+                },
+                Tree {
+                  "children": Array [],
+                  "error": undefined,
+                  "label": "Mono, LBRR Flag: false",
+                  "parent": [Circular],
+                  "range": BitRange {
+                    "bitLength": 1,
+                    "bitStart": 9,
+                    "buffer": ArrayBuffer [],
+                  },
+                },
+              ],
+              "error": undefined,
+              "label": "SILK Frame (1 SILK Frames)",
+              "parent": [Circular],
+              "range": ByteRange {
+                "buffer": ArrayBuffer [],
+                "byteLength": 71,
+                "byteStart": 1,
+              },
+            },
+          ],
+          "error": undefined,
+          "label": "Hybrid Frame",
+          "parent": [Circular],
+          "range": ByteRange {
+            "buffer": ArrayBuffer [],
+            "byteLength": 71,
+            "byteStart": 1,
+          },
+        },
+      ],
+      "error": undefined,
+      "label": "Compressed Frames",
+      "parent": [Circular],
+      "range": ByteRange {
+        "buffer": ArrayBuffer [],
+        "byteLength": 71,
+        "byteStart": 1,
+      },
+    },
+  ],
+  "error": undefined,
+  "label": "Opus Packet",
+  "range": ByteRange {
+    "buffer": ArrayBuffer [],
+    "byteLength": 72,
+    "byteStart": 0,
+  },
+}
+`;
