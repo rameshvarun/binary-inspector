@@ -1,6 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
-const merge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const url = require("url");
@@ -172,9 +172,9 @@ const production = {
 };
 
 module.exports = env => {
-  if (env === "development") return merge(common, development);
-  else if (env === "production") return merge(common, production);
+  if (env.mode === "development") return merge(common, development);
+  else if (env.mode === "production") return merge(common, production);
   else {
-    throw new Error(`Unknown environment ${env}.`);
+    throw new Error(`Unknown environment ${env.mode}.`);
   }
 };

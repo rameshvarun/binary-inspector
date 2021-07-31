@@ -9,8 +9,8 @@
     "test:watch": "jest --watch --no-watchman",
     "format": "prettier --write src/**/*.ts src/**/*.tsx *.js",
     "check-format": "prettier-check src/**/*.ts src/**/*.tsx",
-    "build": "rm -rf dist/ && webpack --env production",
-    "start": "webpack-dev-server --open --env development"
+    "build": "rm -rf dist/ && webpack --env mode=production",
+    "start": "webpack serve --open --env mode=development"
   },
   "author": "Varun Ramesh",
   "license": "ISC",
@@ -33,16 +33,16 @@
     "@types/react-dom": "^16.9.0",
     "copy-webpack-plugin": "^5.1.1",
     "fast-text-encoding": "^1.0.3",
-    "html-webpack-plugin": "^4.0.0-beta.11",
+    "html-webpack-plugin": "^5.3.2",
     "jest": "^27.0.6",
     "prettier": "^1.18.2",
     "prettier-check": "^2.0.0",
     "ts-jest": "^27.0.4",
-    "ts-loader": "^6.2.1",
+    "ts-loader": "^9.2.4",
     "typescript": "^3.5.3",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1",
-    "webpack-merge": "^4.2.2"
+    "webpack": "^5.47.1",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.8.0"
   }
 }
