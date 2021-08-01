@@ -9,16 +9,20 @@ const HEX_BYTES_PER_GROUP = 8;
 const BINARY_BYTES_PER_ROW = 8;
 const BINARY_BYTES_PER_GROUP = 4;
 
-const MAX_ROWS = 1000;
+const DEFAULT_MAX_ROWS = 1000;
 
 const SELECTED_COLOR = "#dedede";
 
 type Format = "hex" | "binary";
 
 export class BinaryView extends React.Component<
-  { data: ByteRange; selected?: ByteRange | BitRange },
+  { data: ByteRange; selected?: ByteRange | BitRange; maxRows: number },
   { format: Format }
 > {
+  static defaultProps = {
+    maxRows: DEFAULT_MAX_ROWS
+  };
+
   constructor(props) {
     super(props);
     this.state = { format: "hex" };
@@ -60,25 +64,41 @@ export class BinaryView extends React.Component<
   renderHex() {
     let data = this.props.data;
 
-    // let totalRows = Math.ceil(data.byteLength / HEX_BYTES_PER_ROW);
+    // The total number of rows required to render the data.
+    let totalRows = Math.ceil(data.byteLength / HEX_BYTES_PER_ROW);
 
-    // let rowStart = 0;
-    // let rowEnd = Math.ceil(data.byteLength / HEX_BYTES_PER_ROW);
+    // The rows that we are rendering. If the data is small, this is all the rows.
+    let rowStart = 0;
+    let rowEnd = Math.ceil(data.byteLength / HEX_BYTES_PER_ROW);
 
-    // const MAX_ROWS = 2;
-    // if (totalRows > MAX_ROWS) {
-    //   if (this.props.selected) {
-    //   } else {
-    //     rowStart = 1;
-    //     rowEnd = MAX_ROWS;
-    //   }
-    // }
+    if (totalRows > this.props.maxRows) {
+      if (this.props.selected) {
+        const byteStart =
+          this.props.selected instanceof ByteRange
+            ? this.props.selected.byteStart
+            : this.props.selected.enclosingByteRange().byteStart;
+        const selectionRow = Math.floor(byteStart / HEX_BYTES_PER_ROW);
 
-    // data = data.bytes(rowStart * HEX_BYTES_PER_ROW,);
+        rowStart = Math.max(
+          0,
+          selectionRow - Math.floor((this.props.maxRows - 1) / 2)
+        );
+        rowEnd = rowStart + this.props.maxRows;
+      } else {
+        rowStart = 0;
+        rowEnd = rowStart + this.props.maxRows;
+      }
+    }
+
+    const bytesLeft = data.byteLength - rowStart * HEX_BYTES_PER_ROW;
+    data = data.bytes(
+      rowStart * HEX_BYTES_PER_ROW,
+      Math.min(bytesLeft, (rowEnd - rowStart) * HEX_BYTES_PER_ROW)
+    );
 
     return (
       <>
-        {/* {(rowStart > 0) ? <div>{rowStart} rows above...</div> : null} */}
+        {rowStart > 0 ? <div>{rowStart} rows above...</div> : null}
         <div
           style={{
             fontFamily: "monospace",
@@ -139,14 +159,16 @@ export class BinaryView extends React.Component<
             ))}
           </span>
         </div>
-        {/* {(rowEnd < totalRows) ? <div>{totalRows - rowEnd} rows below...</div> : null} */}
+        {rowEnd < totalRows ? (
+          <div>{totalRows - rowEnd} rows below...</div>
+        ) : null}
       </>
     );
   }
 
   renderBinary() {
     let data = this.props.data;
-    if (data.byteLength > MAX_ROWS * BINARY_BYTES_PER_ROW)
+    if (data.byteLength > this.props.maxRows * BINARY_BYTES_PER_ROW)
       return <div>File is too large for binary view.</div>;
 
     return (

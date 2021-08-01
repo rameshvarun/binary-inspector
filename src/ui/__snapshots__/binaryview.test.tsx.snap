@@ -1,5 +1,631 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`renders a long sequence of hex bytes with slicing 1`] = `
+Array [
+  <form
+    className=""
+  >
+    <div
+      className="form-group row"
+    >
+      <label
+        className="form-label col-form-label col-sm-2"
+      >
+        Format
+      </label>
+      <div
+        className="col-sm-10"
+      >
+        <select
+          className="form-control"
+          onChange={[Function]}
+          value="hex"
+        >
+          <option
+            value="hex"
+          >
+            Hex
+          </option>
+          <option
+            value="binary"
+          >
+            Binary
+          </option>
+        </select>
+      </div>
+    </div>
+  </form>,
+  <div>
+    1
+     rows above...
+  </div>,
+  <div
+    style={
+      Object {
+        "display": "flex",
+        "flexDirection": "row",
+        "fontFamily": "monospace",
+        "overflowX": "scroll",
+      }
+    }
+  >
+    <span
+      style={
+        Object {
+          "borderColor": "black",
+          "borderRight": "1px solid",
+          "marginRight": "10px",
+          "paddingLeft": "5px",
+          "paddingRight": "5px",
+        }
+      }
+    >
+      <div>
+        <span
+          style={Object {}}
+        >
+          00000010
+        </span>
+      </div>
+      <div>
+        <span
+          style={Object {}}
+        >
+          00000020
+        </span>
+      </div>
+      <div>
+        <span
+          style={Object {}}
+        >
+          00000030
+        </span>
+      </div>
+    </span>
+    <span>
+      <div>
+        <span
+          style={
+            Object {
+              "paddingRight": "10px",
+            }
+          }
+        >
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            10
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            11
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            12
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            13
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            14
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            15
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            16
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            17
+          </span>
+        </span>
+        <span
+          style={
+            Object {
+              "paddingRight": "10px",
+            }
+          }
+        >
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            18
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            19
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            1a
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            1b
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            1c
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            1d
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            1e
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            1f
+          </span>
+        </span>
+      </div>
+      <div>
+        <span
+          style={
+            Object {
+              "paddingRight": "10px",
+            }
+          }
+        >
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            20
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            21
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            22
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            23
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            24
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            25
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            26
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            27
+          </span>
+        </span>
+        <span
+          style={
+            Object {
+              "paddingRight": "10px",
+            }
+          }
+        >
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            28
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            29
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            2a
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            2b
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            2c
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            2d
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            2e
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "#dedede",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            2f
+          </span>
+        </span>
+      </div>
+      <div>
+        <span
+          style={
+            Object {
+              "paddingRight": "10px",
+            }
+          }
+        >
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            30
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            31
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            32
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            33
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            34
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            35
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            36
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            37
+          </span>
+        </span>
+        <span
+          style={
+            Object {
+              "paddingRight": "10px",
+            }
+          }
+        >
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            38
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            39
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            3a
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            3b
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            3c
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            3d
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            3e
+          </span>
+          <span
+            style={
+              Object {
+                "backgroundColor": "",
+                "paddingRight": "5px",
+              }
+            }
+          >
+            3f
+          </span>
+        </span>
+      </div>
+    </span>
+  </div>,
+  <div>
+    1
+     rows below...
+  </div>,
+]
+`;
+
 exports[`renders a short sequence of hex bytes 1`] = `
 Array [
   <form
