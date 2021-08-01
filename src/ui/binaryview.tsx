@@ -23,6 +23,8 @@ export class BinaryView extends React.Component<
     maxRows: DEFAULT_MAX_ROWS
   };
 
+  scrollView: React.RefObject<HTMLDivElement> = React.createRef();
+
   constructor(props) {
     super(props);
     this.state = { format: "hex" };
@@ -61,6 +63,26 @@ export class BinaryView extends React.Component<
     );
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.selected !== prevProps.selected && this.props.selected) {
+      const byteStart =
+        this.props.selected instanceof ByteRange
+          ? this.props.selected.byteStart
+          : this.props.selected.enclosingByteRange().byteStart;
+      const rowStart =
+        Math.floor(byteStart / HEX_BYTES_PER_ROW) * HEX_BYTES_PER_ROW;
+
+      if (this.scrollView.current) {
+        const row = this.scrollView.current.querySelector(
+          `[data-byte-start="${rowStart}"]`
+        );
+        if (row) {
+          row.scrollIntoView();
+        }
+      }
+    }
+  }
+
   renderHex() {
     let data = this.props.data;
 
@@ -97,7 +119,14 @@ export class BinaryView extends React.Component<
     );
 
     return (
-      <>
+      <div
+        className="border rounded"
+        style={{
+          maxHeight: "550px",
+          overflowY: "scroll"
+        }}
+        ref={this.scrollView}
+      >
         {rowStart > 0 ? <div>{rowStart} rows above...</div> : null}
         <div
           style={{
@@ -117,7 +146,7 @@ export class BinaryView extends React.Component<
             }}
           >
             {data.chunks(HEX_BYTES_PER_ROW).map((row, i) => (
-              <div key={i}>
+              <div key={i} data-byte-start={row.byteStart.toString()}>
                 <span style={{}}>
                   {row.byteStart.toString(16).padStart(8, "0")}
                 </span>
@@ -162,7 +191,7 @@ export class BinaryView extends React.Component<
         {rowEnd < totalRows ? (
           <div>{totalRows - rowEnd} rows below...</div>
         ) : null}
-      </>
+      </div>
     );
   }
 

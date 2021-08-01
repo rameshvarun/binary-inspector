@@ -20,13 +20,18 @@ export class TreeBinaryView extends React.Component<
   render() {
     return (
       <>
-        <Row>
+        <Row style={{ maxHeight: "600px", marginTop: "10px" }}>
           <Col md={6}>
-            <TreeView
-              tree={this.props.tree}
-              selected={this.state.selected}
-              onSelect={selected => this.setState({ selected: selected })}
-            />
+            <div
+              className="border rounded"
+              style={{ maxHeight: "600px", overflowY: "scroll" }}
+            >
+              <TreeView
+                tree={this.props.tree}
+                selected={this.state.selected}
+                onSelect={selected => this.setState({ selected: selected })}
+              />
+            </div>
           </Col>
           <Col md={6}>
             <BinaryView
