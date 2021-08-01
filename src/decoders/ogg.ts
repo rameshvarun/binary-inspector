@@ -196,6 +196,25 @@ class TheoraStreamParser implements StreamParser {
   }
 }
 
+// Specification at https://xiph.org/vorbis/doc/Vorbis_I_spec.html
+class VorbisStreamParser implements StreamParser {
+  state: "pre-header" | "pre-comments" = "pre-header";
+  inspectPage(range: ByteRange): Tree {
+    if (this.state == "pre-header") {
+      this.state = "pre-comments";
+
+      let packetType = range.bytes(0, 1);
+      let headerMagic = range.bytes(1, 6);
+
+      return new Tree("Vorbis Identification Header", range, [
+        new Tree(`Packet Type: ${packetType.toHex()}`, packetType),
+        new Tree(`Header Magic: ${headerMagic.readUTF8()}`, headerMagic)
+      ]);
+    }
+    return new Tree("Unimplemented", range, [], new Error());
+  }
+}
+
 function inspectPage(
   streams: Map<number, StreamParser>,
   range: ByteRange
@@ -246,6 +265,12 @@ function inspectPage(
     pageData.bytes(1, 6).readUTF8() === "theora"
   ) {
     streams.set(serialNumber.readUIntLE(), new TheoraStreamParser());
+  } else if (
+    pageData.size() >= 7 &&
+    pageData.bytes(0, 1).readUIntBE() === 1 &&
+    pageData.bytes(1, 6).readUTF8() === "vorbis"
+  ) {
+    streams.set(serialNumber.readUIntLE(), new VorbisStreamParser());
   }
 
   let dataTree = new Tree(`Page Data`, pageData);
