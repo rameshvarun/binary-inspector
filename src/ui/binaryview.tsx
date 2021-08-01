@@ -63,39 +63,65 @@ export class BinaryView extends React.Component<
       return <div>File is too large for binary view.</div>;
 
     return (
-      <div style={{ fontFamily: "monospace" }}>
-        {data.chunks(HEX_BYTES_PER_ROW).map((row, i) => (
-          <div key={i}>
-            {row.chunks(HEX_BYTES_PER_GROUP).map((group, i) => (
-              <span style={{ paddingRight: "10px" }} key={i}>
-                {group.chunks(1).map((byte, i) => {
-                  let selected = false;
-                  if (this.props.selected) {
-                    if (this.props.selected instanceof ByteRange) {
-                      selected = this.props.selected.contains(byte);
-                    } else if (this.props.selected instanceof BitRange) {
-                      selected = this.props.selected
-                        .enclosingByteRange()
-                        .contains(byte);
-                    }
-                  }
-
-                  return (
-                    <span
-                      style={{
-                        paddingRight: "5px",
-                        backgroundColor: selected ? SELECTED_COLOR : ""
-                      }}
-                      key={i}
-                    >
-                      {byte.toHex()}
-                    </span>
-                  );
-                })}
+      <div
+        style={{
+          fontFamily: "monospace",
+          overflowX: "scroll",
+          display: "flex",
+          flexDirection: "row"
+        }}
+      >
+        <span
+          style={{
+            borderColor: "black",
+            borderRight: "1px solid",
+            paddingRight: "5px",
+            paddingLeft: "5px",
+            marginRight: "10px"
+          }}
+        >
+          {data.chunks(HEX_BYTES_PER_ROW).map((row, i) => (
+            <div key={i}>
+              <span style={{}}>
+                {row.byteStart.toString(16).padStart(8, "0")}
               </span>
-            ))}
-          </div>
-        ))}
+            </div>
+          ))}
+        </span>
+        <span>
+          {data.chunks(HEX_BYTES_PER_ROW).map((row, i) => (
+            <div key={i}>
+              {row.chunks(HEX_BYTES_PER_GROUP).map((group, i) => (
+                <span style={{ paddingRight: "10px" }} key={i}>
+                  {group.chunks(1).map((byte, i) => {
+                    let selected = false;
+                    if (this.props.selected) {
+                      if (this.props.selected instanceof ByteRange) {
+                        selected = this.props.selected.contains(byte);
+                      } else if (this.props.selected instanceof BitRange) {
+                        selected = this.props.selected
+                          .enclosingByteRange()
+                          .contains(byte);
+                      }
+                    }
+
+                    return (
+                      <span
+                        style={{
+                          paddingRight: "5px",
+                          backgroundColor: selected ? SELECTED_COLOR : ""
+                        }}
+                        key={i}
+                      >
+                        {byte.toHex()}
+                      </span>
+                    );
+                  })}
+                </span>
+              ))}
+            </div>
+          ))}
+        </span>
       </div>
     );
   }
