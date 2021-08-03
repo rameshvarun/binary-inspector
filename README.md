@@ -1,4 +1,4 @@
-# Binary Inspector
+# 🔍 Binary Inspector
 
 [![Build Status](https://travis-ci.com/rameshvarun/binary-inspector.svg?branch=master)](https://travis-ci.com/rameshvarun/binary-inspector)
 
