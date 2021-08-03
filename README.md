@@ -12,7 +12,7 @@ This project contains web-based inspectors for binary formats. It can be used to
 
 
 
-## Adding a New  Inspector
+## Adding a New  Inspector (IEEE 754 Single Precision Floating Point)
 
 ```typescript
 // An inspector is defined by a function that takes a `ByteRange` and
