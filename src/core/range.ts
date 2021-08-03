@@ -32,6 +32,15 @@ export class ByteRange {
     return utf8decoder.decode(this.toUint8Array());
   }
 
+  nullTerminated() {
+    let data = this.toUint8Array();
+
+    let index = data.findIndex(byte => byte === 0);
+    assert.isAtLeast(index, 0);
+
+    return this.bytes(0, index);
+  }
+
   toHex(): string {
     return Array.from(this.toUint8Array())
       .map(b => b.toString(16).padStart(2, "0"))

@@ -91,6 +91,13 @@ const INSPECTORS = [
     subtitle: `Based off of the <a href='https://github.com/msgpack/msgpack/blob/master/spec.md'>Msgpack Spec</a>`
   },
   {
+    chunkName: "binary32",
+    entry: "./src/inspectors/binary32.tsx",
+    title: "IEEE 754 Single-Precision Floating Point",
+    description: "",
+    subtitle: ``
+  },
+  {
     chunkName: "custom",
     entry: "./src/inspectors/custom.tsx",
     title: "Custom Data Inspector",

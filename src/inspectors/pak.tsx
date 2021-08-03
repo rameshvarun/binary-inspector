@@ -9,7 +9,7 @@ function inspectFileEntry(
   range: ByteRange,
   file: ByteRange
 ): { entry: Tree; contents: Tree } {
-  let name = range.bytes(0, 56);
+  let name = range.bytes(0, 56).nullTerminated();
   let offset = range.bytes(56, 4);
   let size = range.bytes(60, 4);
 
