@@ -76,11 +76,12 @@ const codeMirror = Promise.all([
   LoadScript(
     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.0/codemirror.min.js",
     "sha512-guAOPzMlYhWXne9TpfFRWD7iI0YnDTVqNN8fNgZGeqcmZFuUKWxD1/74Rsse81voD2uzxyBJkkp97G/tahKipg=="
-  ),
-  LoadScript(
-    "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.0/mode/javascript/javascript.min.js",
-    "sha512-ZV6RoI4VtjC2qr4NUVLAXqcUjEtxgD1mxx05KrDXI6iU8fFh61XU/PhQzYZGap0ueg4mvLqbNzKPHLoow3U+5A=="
-  ),
+  ).then(() => {
+    return LoadScript(
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.0/mode/javascript/javascript.min.js",
+      "sha512-ZV6RoI4VtjC2qr4NUVLAXqcUjEtxgD1mxx05KrDXI6iU8fFh61XU/PhQzYZGap0ueg4mvLqbNzKPHLoow3U+5A=="
+    );
+  }),
   LoadCSS(
     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.0/codemirror.min.css",
     "sha512-MWdvo/Qqcf4pY1ecQUB1uBn0qLp19U/qJ1Rpp2BDZeuBA7YsFEwkvqR/+aG4BroPiAYDunKJ6X8R/Pmdt3p7oA=="
@@ -88,8 +89,13 @@ const codeMirror = Promise.all([
 ]);
 
 // Install classes into the local namespace for the eval'ed code to be able to access.
-// @ts-ignore
-window.Tree = Tree;
+Object.assign(window, {
+  Tree: Tree,
+  ByteRange: ByteRange,
+  BitRange: BitRange,
+  opus: require("../decoders/opus"),
+  rtp: require("../decoders/rtp")
+});
 
 const DEFAULT_CODE = `((range) => {
   return new Tree("Example Tree", range, []);

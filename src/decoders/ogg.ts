@@ -277,8 +277,8 @@ function inspectPage(
   if (streams.has(serialNumber.readUIntLE())) {
     try {
       dataTree = streams
-      .get(serialNumber.readUIntLE())!
-      .inspectPage(pageData, segments);
+        .get(serialNumber.readUIntLE())!
+        .inspectPage(pageData, segments);
     } catch (e) {
       dataTree = new Tree(`Malformed Page: ${e.message}`, pageData, [], e);
     }
