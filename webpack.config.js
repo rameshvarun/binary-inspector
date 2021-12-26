@@ -98,6 +98,13 @@ const INSPECTORS = [
     subtitle: ``
   },
   {
+    chunkName: "glb",
+    entry: "./src/inspectors/glb.tsx",
+    title: "GLB Chunk Inspector",
+    description: "",
+    subtitle: ``
+  },
+  {
     chunkName: "custom",
     entry: "./src/inspectors/custom.tsx",
     title: "Custom Data Inspector",
