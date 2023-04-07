@@ -1,6 +1,6 @@
 # 🔍 Binary Inspector
 
-[![Build Status](https://travis-ci.com/rameshvarun/binary-inspector.svg?branch=master)](https://travis-ci.com/rameshvarun/binary-inspector)
+[![Node.js CI](https://github.com/rameshvarun/binary-inspector/actions/workflows/node.js.yml/badge.svg)](https://github.com/rameshvarun/binary-inspector/actions/workflows/node.js.yml)
 
 This project contains web-based inspectors for binary formats. It can be used to help debug programs that process packets and binary data files. The project also contains an interface that makes it simple to write an inspector for a new binary format.
 
