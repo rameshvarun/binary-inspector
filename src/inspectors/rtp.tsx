@@ -105,7 +105,7 @@ class RTPInspector extends React.Component<{}, RTPInspectorState> {
 
         {Array.from(this.state.payloadParsers.entries()).map(([pt, parser]) => (
           <div>
-            {pt} -> {parser.name}
+            {pt} {"->"} {parser.name}
           </div>
         ))}
 
