@@ -48,7 +48,7 @@ function inspect(range: ByteRange): Tree {
   return new Tree(`Test Tree`, range, []);
 }
 
-function LoadCSS(href, integrity) {
+function LoadCSS(href, integrity): Promise<void> {
   return new Promise((resolve, reject) => {
     let link = document.createElement("link");
     link.rel = "stylesheet";
@@ -60,7 +60,7 @@ function LoadCSS(href, integrity) {
   });
 }
 
-function LoadScript(href, integrity) {
+function LoadScript(href, integrity): Promise<void> {
   return new Promise((resolve, reject) => {
     let script = document.createElement("script");
     script.type = "application/javascript";
