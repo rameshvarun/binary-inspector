@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { ByteRange, BitRange } from "../core/range";
 import { Tree } from "../core/tree";
+import { Color } from "../core/color";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faCaretDown } from "@fortawesome/free-solid-svg-icons";
@@ -49,11 +50,24 @@ export class TreeView extends React.Component<
     let depth = this.props.depth || 0;
 
     let backgroundColor = "";
+
     if (tree.error) {
       backgroundColor = ERROR_BACKGROUND_COLOR;
     }
-    if (this.props.selected == tree) {
-      backgroundColor = "#dedede";
+
+
+    if (tree.color.isDefault()) {
+        if (this.props.selected == tree) {
+            backgroundColor = tree.color.hex;
+        } else {
+            backgroundColor = Color.white().hex;
+        }
+    } else {
+        if (this.props.selected == tree) {
+            backgroundColor = tree.color.hex
+        } else {
+            backgroundColor = tree.color.hexLighter();
+        }
     }
 
     if (tree.children.length > 0) {
@@ -83,7 +97,9 @@ export class TreeView extends React.Component<
                 icon={this.state.open ? faCaretDown : faCaretRight}
               />
             </span>
-            <span>{tree.label}</span>
+            <span title={`Byte ${tree.range.offset()} to ${tree.range.offset() + tree.range.size()}`}>
+                {tree.label}
+            </span>
           </div>
 
           {this.state.open &&
@@ -101,7 +117,7 @@ export class TreeView extends React.Component<
       );
     } else {
       return (
-        <div
+        <div title={`Byte ${tree.range.offset()} to ${tree.range.offset() + tree.range.size()}`}
           style={{
             backgroundColor,
             paddingLeft: "5px"

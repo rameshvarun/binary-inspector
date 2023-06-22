@@ -1,10 +1,12 @@
 import { ByteRange, BitRange } from "./range";
+import { Color } from "./color";
 
 export class Tree {
   label: string;
   range: ByteRange | BitRange;
   children: Array<Tree>;
   error?: Error;
+  color: Color;
 
   parent?: Tree;
 
@@ -12,12 +14,14 @@ export class Tree {
     label: string,
     range: ByteRange | BitRange,
     children: Array<Tree> = [],
-    error?: Error
+    error?: Error,
+    color?: Color
   ) {
     this.label = label;
     this.range = range;
     this.children = children;
     this.error = error;
+    this.color = color || Color.default();
 
     // Set parent pointers for the children tree objects.
     for (let child of this.children) {
@@ -37,5 +41,11 @@ export class Tree {
 
   isParentOf(other: Tree): boolean {
     return other.isChildOf(this);
+  }
+
+  withColor(color: Color): Tree {
+    this.color = color;
+
+    return this;
   }
 }

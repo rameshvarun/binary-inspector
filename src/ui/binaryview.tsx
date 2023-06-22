@@ -2,6 +2,8 @@ import * as React from "react";
 import { Col, Form, Row } from "react-bootstrap";
 
 import { ByteRange, BitRange } from "../core/range";
+import { Color } from "../core/color";
+import { Tree } from "../core/tree";
 
 const HEX_BYTES_PER_ROW = 16;
 const HEX_BYTES_PER_GROUP = 8;
@@ -11,12 +13,10 @@ const BINARY_BYTES_PER_GROUP = 4;
 
 const DEFAULT_MAX_ROWS = 1000;
 
-const SELECTED_COLOR = "#dedede";
-
 type Format = "hex" | "binary";
 
 export class BinaryView extends React.Component<
-  { data: ByteRange; selected?: ByteRange | BitRange; maxRows: number },
+  { data: ByteRange; selected?: ByteRange | BitRange; maxRows: number; tree: Tree },
   { format: Format }
 > {
   static defaultProps = {
@@ -81,6 +81,24 @@ export class BinaryView extends React.Component<
         }
       }
     }
+  }
+
+  byteColor(tree: Tree, byteNumber: number, color?: Color) {
+    for (const t of tree.children) {
+      if (t.range.offset() <= byteNumber && byteNumber <= (t.range.offset() + t.range.size())) {
+        if (!t.color.isDefault()) {
+          color = t.color;
+        }
+
+        const deepColor = this.byteColor(t, byteNumber, color);
+
+        if (deepColor !== undefined) {
+          color = deepColor;
+        }
+      }
+    }
+
+    return color;
   }
 
   renderHex() {
@@ -153,11 +171,12 @@ export class BinaryView extends React.Component<
               </div>
             ))}
           </span>
+
           <span>
-            {data.chunks(HEX_BYTES_PER_ROW).map((row, i) => (
-              <div key={i}>
-                {row.chunks(HEX_BYTES_PER_GROUP).map((group, i) => (
-                  <span style={{ paddingRight: "10px" }} key={i}>
+            {data.chunks(HEX_BYTES_PER_ROW).map((row, k) => (
+              <div key={k}>
+                {row.chunks(HEX_BYTES_PER_GROUP).map((group, j) => (
+                  <span style={{ paddingRight: "10px" }} key={j}>
                     {group.chunks(1).map((byte, i) => {
                       let selected = false;
                       if (this.props.selected) {
@@ -170,11 +189,15 @@ export class BinaryView extends React.Component<
                         }
                       }
 
+                      const byteNumber = i + (j * 8) + (k * 16);
+                      const color = this.byteColor(this.props.tree, byteNumber, undefined) || this.props.tree.color;
+
                       return (
                         <span
                           style={{
                             paddingRight: "5px",
-                            backgroundColor: selected ? SELECTED_COLOR : ""
+                            fontWeight: selected ? 'bold': 'normal',
+                            backgroundColor: selected ? color.hex : (color.isDefault() ? "" : color.hexLighter())
                           }}
                           key={i}
                         >
@@ -206,8 +229,7 @@ export class BinaryView extends React.Component<
           <div key={i}>
             {row.chunks(BINARY_BYTES_PER_GROUP).map((group, i) => (
               <span style={{ paddingRight: "10px" }} key={i}>
-                {group.chunks(1).map((byte, i) => {
-                  return (
+                {group.chunks(1).map((byte, i) => (
                     <span
                       style={{
                         paddingRight: "5px"
@@ -230,10 +252,14 @@ export class BinaryView extends React.Component<
                               selected = this.props.selected.contains(b);
                             }
                           }
+
+                          const color = this.byteColor(this.props.tree, Math.floor(b.offset() / 8), undefined) || this.props.tree.color;
+
                           return (
                             <span
                               style={{
-                                backgroundColor: selected ? SELECTED_COLOR : ""
+                                fontWeight: selected ? 'bold': 'normal',
+                                backgroundColor: selected ? color.hex : (color.isDefault() ? "" : color.hexLighter())
                               }}
                               key={i}
                             >
@@ -242,8 +268,7 @@ export class BinaryView extends React.Component<
                           );
                         })}
                     </span>
-                  );
-                })}
+                  ))}
               </span>
             ))}
           </div>

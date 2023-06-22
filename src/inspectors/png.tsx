@@ -6,6 +6,7 @@ import { assert } from "chai";
 import { ByteRange, BitRange } from "../core/range";
 import { SimpleInspector } from "../ui/simpleinspector";
 import { Tree } from "../core/tree";
+import { Color } from "../core/color";
 
 import { hexEllipsis } from "../core/utils";
 
@@ -91,20 +92,20 @@ function inspect(range: ByteRange): Tree {
         `Chunk (${type.readUTF8()})`,
         ptr.bytes(0, chunkSize),
         [
-          new Tree(`Length: ${byteLen}`, length),
-          new Tree(`Type: ${type.readUTF8()}`, type)
+          new Tree(`Length: ${byteLen}`, length).withColor(Color.blue()),
+          new Tree(`Type: ${type.readUTF8()}`, type).withColor(Color.orange())
         ]
           .concat(chunkElements)
-          .concat([new Tree(`CRC: ${crc.readUIntBE()}`, crc)])
-      )
+          .concat([new Tree(`CRC: ${crc.readUIntBE()}`, crc).withColor(Color.brown())])
+      ).withColor(Color.green())
     );
 
     ptr = ptr.bytes(chunkSize);
   }
 
   return new Tree("PNG Image", range, [
-    new Tree(`Signature: ${signature.toHex()}`, signature),
-    new Tree(`Chunks (${chunks.length})`, range.bytes(8), chunks)
+    new Tree(`Signature: ${signature.toHex()}`, signature).withColor(Color.red()),
+    new Tree(`Chunks (${chunks.length})`, range.bytes(8), chunks).withColor(Color.magenta())
   ]);
 }
 

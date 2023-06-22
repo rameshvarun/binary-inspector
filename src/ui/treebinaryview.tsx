@@ -16,8 +16,8 @@ export class TreeBinaryView extends React.Component<
     super(props);
     this.state = {};
   }
-
   render() {
+
     return (
       <>
         <Row style={{ maxHeight: "600px", marginTop: "10px" }}>
@@ -34,7 +34,9 @@ export class TreeBinaryView extends React.Component<
             </div>
           </Col>
           <Col md={6}>
+
             <BinaryView
+              tree={this.props.tree}
               data={this.props.data}
               selected={
                 this.state.selected ? this.state.selected.range : undefined

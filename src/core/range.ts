@@ -15,6 +15,10 @@ export class ByteRange {
     this.byteLength = byteLength;
   }
 
+  offset(): number {
+    return this.byteStart;
+  }
+
   size(): number {
     return this.byteLength;
   }
@@ -151,6 +155,14 @@ export class BitRange {
     this.buffer = buffer;
     this.bitStart = bitStart;
     this.bitLength = bitLength;
+  }
+
+  offset(): number {
+    return this.bitStart;
+  }
+
+  size(): number {
+    return this.bitLength;
   }
 
   enclosingByteRange(): ByteRange {
