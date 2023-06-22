@@ -100,7 +100,7 @@ Object.assign(window, {
 });
 
 const DEFAULT_CODE = `((range) => {
-  return new Tree("Example Tree", range, []);
+  return new Tree("Example Tree", range, []).withColor(Color.red());
 })`;
 
 class CustomInspector extends React.Component<{}, CustomInspectorState> {
