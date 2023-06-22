@@ -97,7 +97,7 @@ export class TreeView extends React.Component<
                 icon={this.state.open ? faCaretDown : faCaretRight}
               />
             </span>
-            <span title={`Byte ${tree.range.offset()} to ${tree.range.offset() + tree.range.size()}`}>
+            <span title={`Byte range from ${tree.range.offset()} to ${tree.range.offset() + tree.range.size()}`}>
                 {tree.label}
             </span>
           </div>
@@ -117,7 +117,7 @@ export class TreeView extends React.Component<
       );
     } else {
       return (
-        <div title={`Byte ${tree.range.offset()} to ${tree.range.offset() + tree.range.size()}`}
+        <div title={`Byte range from ${tree.range.offset()} to ${tree.range.offset() + tree.range.size()}`}
           style={{
             backgroundColor,
             paddingLeft: "5px"
