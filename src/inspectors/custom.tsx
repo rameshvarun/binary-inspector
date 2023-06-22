@@ -1,5 +1,6 @@
 import { ByteRange, BitRange } from "../core/range";
 import { Tree } from "../core/tree";
+import { Color } from "../core/color";
 import { assert } from "chai";
 
 import * as React from "react";
@@ -93,6 +94,7 @@ Object.assign(window, {
   Tree: Tree,
   ByteRange: ByteRange,
   BitRange: BitRange,
+  Color: Color,
   opus: require("../decoders/opus"),
   rtp: require("../decoders/rtp")
 });
