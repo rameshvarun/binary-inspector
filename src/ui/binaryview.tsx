@@ -89,7 +89,7 @@ export class BinaryView extends React.Component<
     }
 
     for (const t of tree.children) {
-      if (t.range.offset() <= byteNumber && byteNumber <= (t.range.offset() + t.range.size())) {
+      if (t.range.offset() <= byteNumber && byteNumber < (t.range.offset() + t.range.size())) {
         if (!t.color.isDefault()) {
           color = t.color;
         }
