@@ -84,6 +84,10 @@ export class BinaryView extends React.Component<
   }
 
   byteColor(tree: Tree, byteNumber: number, color?: Color) {
+    if (tree === undefined) {
+      return Color.default();
+    }
+
     for (const t of tree.children) {
       if (t.range.offset() <= byteNumber && byteNumber <= (t.range.offset() + t.range.size())) {
         if (!t.color.isDefault()) {
