@@ -193,7 +193,7 @@ export class BinaryView extends React.Component<
                         }
                       }
 
-                      const byteNumber = i + (j * 8) + (k * 16);
+                      const byteNumber = i + (j * HEX_BYTES_PER_GROUP) + (k * HEX_BYTES_PER_ROW);
                       const color = this.byteColor(this.props.tree, byteNumber, undefined) || this.props.tree.color;
 
                       return (
@@ -257,7 +257,7 @@ export class BinaryView extends React.Component<
                             }
                           }
 
-                          const color = this.byteColor(this.props.tree, Math.floor(b.offset() / 8), undefined) || this.props.tree.color;
+                          const color = this.byteColor(this.props.tree, Math.floor(b.offset() / HEX_BYTES_PER_GROUP), undefined) || this.props.tree.color;
 
                           return (
                             <span
