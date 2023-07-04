@@ -9,6 +9,7 @@ interface StreamParser {
   inspectPage(data: ByteRange, segments: Array<ByteRange>): Tree;
 }
 
+// https://datatracker.ietf.org/doc/html/rfc7845
 class OpusStreamParser implements StreamParser {
   state: "pre-header" | "pre-comments" | "packets" = "pre-header";
   inspectPage(range: ByteRange, segments: Array<ByteRange>): Tree {
@@ -215,10 +216,12 @@ class VorbisStreamParser implements StreamParser {
   }
 }
 
+// Read Ogg page format. https://datatracker.ietf.org/doc/html/rfc3533#section-6
 function inspectPage(
   streams: Map<number, StreamParser>,
   range: ByteRange
 ): [ByteRange, Tree] {
+  // Look for the magic number.
   let pageStart = range.bytes(0, 4);
   if (pageStart.readUTF8() !== "OggS") {
     throw new Error(`Could not find magic page start header.`);
@@ -248,12 +251,29 @@ function inspectPage(
 
   let segments: Array<ByteRange> = [];
   let ptr = range.bytes(header.size());
+  let currentSegmentSize = 0;
   for (let i = 0; i < pageSegments.readUIntBE(); ++i) {
-    let segmentSize = lacingValues[i].readUIntBE();
-    let segment = ptr.bytes(0, segmentSize);
-    segments.push(segment);
+    // Read one lacing value and add it to our current accumulator.
+    let lacingValue = lacingValues[i].readUIntBE();
+    currentSegmentSize += lacingValue;
 
-    ptr = ptr.bytes(segmentSize);
+    // If the current lacing value is < 255, this marks the end of a segment.
+    if (lacingValue < 255) {
+      // Create a segment from the current accumulated size.
+      let segment = ptr.bytes(0, currentSegmentSize);
+      segments.push(segment);
+
+      // Advance past the current segment.
+      ptr = ptr.bytes(currentSegmentSize);
+
+      // Reset segment size accumulator
+      currentSegmentSize = 0;
+    }
+  }
+
+  // TODO: Packets that span across pages.
+  if (currentSegmentSize > 0) {
+    throw new Error("Packets that span multiple pages are not yet implemented.");
   }
 
   // Look for stream headers.
@@ -320,6 +340,7 @@ function inspectPage(
 }
 
 export function inspect(range: ByteRange): Tree {
+  // An Ogg file consists of logical streams, multiplexed using pages.
   let streams: Map<number, StreamParser> = new Map();
   let pages: Array<Tree> = [];
 
@@ -328,6 +349,8 @@ export function inspect(range: ByteRange): Tree {
     let [pageRange, pageTree] = inspectPage(streams, ptr);
 
     pages.push(pageTree);
+
+    // Advance pointer past the end of the page.
     ptr = ptr.bytes(pageRange.size());
   }
 
