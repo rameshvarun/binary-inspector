@@ -273,7 +273,9 @@ function inspectPage(
 
   // TODO: Packets that span across pages.
   if (currentSegmentSize > 0) {
-    throw new Error("Packets that span multiple pages are not yet implemented.");
+    throw new Error(
+      "Packets that span multiple pages are not yet implemented."
+    );
   }
 
   // Look for stream headers.

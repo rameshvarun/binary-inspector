@@ -19,4 +19,4 @@ test("Ogg Opus high-bitrate noise", () => {
   let data = fs.readFileSync(path.join(__dirname, "__files__", "noise.opus"));
   let range = new ByteRange(data.buffer, data.byteOffset, data.byteLength);
   expect(inspect(range)).toMatchSnapshot();
-})
+});
