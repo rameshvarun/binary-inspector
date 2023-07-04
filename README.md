@@ -13,7 +13,7 @@ This project contains web-based inspectors for binary formats. It can be used to
 
 ## Developing
 
-```
+```bash
 git clone https://github.com/rameshvarun/binary-inspector.git
 cd binary-inspector && npm install
 npm start
