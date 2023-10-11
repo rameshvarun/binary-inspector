@@ -26,7 +26,9 @@ function inspectFixmap(range: ByteRange): [Tree, ByteRange] {
     new Tree(
       `Fixmap, n=${n.readUIntBE()}`,
       mapRange,
-      [new Tree(`Tag`, tag), new Tree("n", n)].concat(entries)
+      [new Tree(`Tag`, tag), new Tree(`n = ${n.readUIntBE()}`, n)].concat(
+        entries
+      )
     ),
     ptr
   ];
@@ -113,6 +115,28 @@ function inspectNil(range: ByteRange): [Tree, ByteRange] {
   return [new Tree(`Nil`, range.bytes(0, 1)), range.bytes(1)];
 }
 
+function inspectExt(range: ByteRange, lengthSize: number): [Tree, ByteRange] {
+  const tag = range.bytes(0, 1);
+  const size = range.bytes(1, lengthSize);
+  const type = range.bytes(1 + lengthSize, 1);
+
+  const HEADER_SIZE_BYTES = 2 + lengthSize;
+
+  const data = range.bytes(HEADER_SIZE_BYTES, size.readUIntBE());
+  const ext32 = range.bytes(0, HEADER_SIZE_BYTES + size.readUIntBE());
+  const ptr = range.bytes(HEADER_SIZE_BYTES + size.readUIntBE());
+
+  return [
+    new Tree(`ext 32`, ext32, [
+      new Tree(`Tag`, tag),
+      new Tree(`Size: ${size.readUIntBE()}`, size),
+      new Tree(`Type: ${type.readUIntBE()}`, type),
+      new Tree(`Data`, data)
+    ]),
+    ptr
+  ];
+}
+
 function inspectValue(range: ByteRange): [Tree, ByteRange] {
   if (range.bits(0, 4).readUIntBE() === 8) {
     return inspectFixmap(range);
@@ -128,6 +152,12 @@ function inspectValue(range: ByteRange): [Tree, ByteRange] {
     return inspectUint8(range);
   } else if (range.bytes(0, 1).readUIntBE() === 192) {
     return inspectNil(range);
+  } else if (range.bytes(0, 1).readUIntBE() === 0xc7) {
+    return inspectExt(range, 1);
+  } else if (range.bytes(0, 1).readUIntBE() === 0xc8) {
+    return inspectExt(range, 2);
+  } else if (range.bytes(0, 1).readUIntBE() === 0xc9) {
+    return inspectExt(range, 4);
   } else {
     throw new Error(`Unimplemented type code: ${range.bytes(0, 1).toHex()}`);
   }
