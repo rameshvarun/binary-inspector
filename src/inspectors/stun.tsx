@@ -20,21 +20,63 @@ ATTRIBUTE_PARSERS.set(0x0001, {
     let family = value.bytes(1, 1);
     let port = value.bytes(2, 2);
 
-    // TODO: Actually decode the IP addresses.
-
+    let ipTree: Array<Tree> = [];
     let familyName = "UNKNOWN";
     switch (family.readUIntBE()) {
       case 1:
         familyName = "IPv4";
+
+        let ip = value.bytes(4, 4);
+        // prettier-ignore
+        let ipString =  (ip.bytes(0, 1).readUIntBE()).toString() +
+          "." + (ip.bytes(1, 1).readUIntBE()).toString() +
+          "." + (ip.bytes(2, 1).readUIntBE()).toString() +
+          "." + (ip.bytes(3, 1).readUIntBE()).toString();
+
+        ipTree = [new Tree(`IP: ${ipString}`, ip)];
         break;
       case 2:
         familyName = "IPv6";
+        // TODO: Decode IPv6 address
         break;
     }
     return [
       new Tree(`Family: ${familyName} (0x${family.toHex()})`, family),
       new Tree(`Port: ${port.readUIntBE()}`, port)
-    ];
+    ].concat(ipTree);
+  }
+});
+
+ATTRIBUTE_PARSERS.set(0x0020, {
+  name: "XOR-MAPPED-ADDRESS",
+  parse: (value: ByteRange) => {
+    let family = value.bytes(1, 1);
+    let port = value.bytes(2, 2);
+
+    let ipTree: Array<Tree> = [];
+    let familyName = "UNKNOWN";
+    switch (family.readUIntBE()) {
+      case 1:
+        familyName = "IPv4";
+
+        let ip = value.bytes(4, 4);
+        // prettier-ignore
+        let ipString =  (ip.bytes(0, 1).readUIntBE() ^ 0x21).toString() +
+          "." + (ip.bytes(1, 1).readUIntBE() ^ 0x12).toString() +
+          "." + (ip.bytes(2, 1).readUIntBE() ^ 0xa4).toString() +
+          "." + (ip.bytes(3, 1).readUIntBE() ^ 0x42).toString();
+
+        ipTree = [new Tree(`IP: ${ipString}`, ip)];
+        break;
+      case 2:
+        familyName = "IPv6";
+        // TODO: Decode IPv6 address
+        break;
+    }
+    return [
+      new Tree(`Family: ${familyName} (0x${family.toHex()})`, family),
+      new Tree(`Port: ${port.readUIntBE() ^ 0x2112}`, port)
+    ].concat(ipTree);
   }
 });
 
