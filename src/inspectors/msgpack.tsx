@@ -137,6 +137,10 @@ function inspectExt(range: ByteRange, lengthSize: number): [Tree, ByteRange] {
   ];
 }
 
+function inspectBoolean(range: ByteRange, value: boolean): [Tree, ByteRange] {
+  return [new Tree(`bool (${value})`, range.bytes(0, 1)), range.bytes(1)];
+}
+
 function inspectValue(range: ByteRange): [Tree, ByteRange] {
   if (range.bits(0, 4).readUIntBE() === 8) {
     return inspectFixmap(range);
@@ -158,6 +162,10 @@ function inspectValue(range: ByteRange): [Tree, ByteRange] {
     return inspectExt(range, 2);
   } else if (range.bytes(0, 1).readUIntBE() === 0xc9) {
     return inspectExt(range, 4);
+  } else if (range.bytes(0, 1).readUIntBE() === 0xc3) {
+    return inspectBoolean(range, true);
+  } else if (range.bytes(0, 1).readUIntBE() === 0xc2) {
+    return inspectBoolean(range, false);
   } else {
     throw new Error(`Unimplemented type code: ${range.bytes(0, 1).toHex()}`);
   }
