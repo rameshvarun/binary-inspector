@@ -1,0 +1,6 @@
+{
+    "name": "binary-inspector-dev",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+    "forwardPorts": [8080],
+    "remoteUser": "node"
+}

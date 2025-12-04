@@ -172,21 +172,22 @@ const common = {
   }
 };
 
-const development = {
+const development = (env) => ({
   mode: "development",
   devtool: "inline-source-map",
   devServer: {
     contentBase: "./dist",
-    https: true
+    https: true,
+    host: env.host || "localhost"
   }
-};
+});
 
 const production = {
   mode: "production"
 };
 
 module.exports = env => {
-  if (env.mode === "development") return merge(common, development);
+  if (env.mode === "development") return merge(common, development(env));
   else if (env.mode === "production") return merge(common, production);
   else {
     throw new Error(`Unknown environment ${env.mode}.`);
