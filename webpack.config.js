@@ -172,7 +172,7 @@ const common = {
   }
 };
 
-const development = (env) => ({
+const development = env => ({
   mode: "development",
   devtool: "inline-source-map",
   devServer: {
