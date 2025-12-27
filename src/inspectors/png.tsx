@@ -66,6 +66,14 @@ CHUNK_PARSERS.set("tEXt", {
   }
 });
 
+CHUNK_PARSERS.set("gAMA", {
+  name: "Image Gamma",
+  parser: (range: ByteRange) => {
+    let gamma = range.bytes(0, 4);
+    return [new Tree(`Gamma: ${gamma.readUIntBE() / 100000}`, gamma)];
+  }
+});
+
 function inspect(range: ByteRange): Tree {
   let signature = range.bytes(0, 8);
 
