@@ -4,6 +4,9 @@ const { merge } = require("webpack-merge");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const url = require("url");
+const child_process = require("child_process");
+
+const GIT_REVISION = child_process.execSync("git rev-parse HEAD").toString().trim();
 
 const INSPECTORS = [
   {
@@ -130,7 +133,8 @@ for (let inspector of INSPECTORS) {
         title: inspector.title,
         subtitle: inspector.subtitle,
         description: inspector.description,
-        githubURL: url.resolve(GITHUB_ROOT, inspector.entry)
+        githubURL: url.resolve(GITHUB_ROOT, inspector.entry),
+        gitRevision: GIT_REVISION
       }
     })
   );
